@@ -266,6 +266,7 @@ class IntegrationTest(TestCase):
             requirements_txt_extra_content = ["-c " + self.constraints_txt_path()]
         else:
             requirements_txt_extra_content = []
+        requirements_txt_extra_content += self.GLOBAL_CONSTRAINTS
         return "\n".join(self.requirements + requirements_txt_extra_content)
 
     def generate_constraints_txt(self) -> None:
@@ -304,6 +305,8 @@ class IntegrationTest(TestCase):
     name_of_testcase: str = "undefined"
     external_dependencies: List[str] = []
     explicit_build_directory: bool = False
+
+    GLOBAL_CONSTRAINTS = ["zipp != 2.0"]
 
 
 @attrs
