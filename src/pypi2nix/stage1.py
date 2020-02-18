@@ -116,7 +116,8 @@ class WheelBuilder:
                 distribution = SourceDistribution.from_archive(
                     archive, self.logger, requirement_parser=self.requirement_parser
                 )
-            except DistributionNotDetected:
+            except DistributionNotDetected as e:
+                self.logger.warning(f"{e}")
                 continue
             distributions.append(distribution)
         return distributions

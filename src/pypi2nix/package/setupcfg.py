@@ -8,6 +8,7 @@ from pypi2nix.requirement_parser import RequirementParser
 from pypi2nix.requirement_set import RequirementSet
 from pypi2nix.target_platform import TargetPlatform
 
+from .exceptions import DistributionNotDetected
 from .interfaces import HasBuildDependencies
 
 
@@ -19,7 +20,12 @@ class SetupCfg(HasBuildDependencies):
         requirement_parser: RequirementParser,
     ):
         self.setup_cfg_path = setup_cfg_path
-        self.setup_cfg = read_configuration(setup_cfg_path)
+        try:
+            self.setup_cfg = read_configuration(setup_cfg_path)
+        except ModuleNotFoundError:
+            raise DistributionNotDetected(
+                f"Could not detect distribution for configuration file `{setup_cfg_path}`"
+            )
         self.logger = logger
         self.requirement_parser = requirement_parser
 
