@@ -91,6 +91,29 @@ def test_can_generate_valid_packages_with_two_runtime_dependencies(
     assert "dependency2" in installed_packages
 
 
+def test_can_generate_valid_packages_with_extras_require(
+    package_generator: PackageGenerator,
+    requirement_parser: RequirementParser,
+    pip: Pip,
+    target_directory: Path,
+    install_target: Path,
+    current_platform: TargetPlatform,
+):
+    package_generator.generate_setuptools_package(
+        name="testpackage", extras_require={"extra": ["extrapackage"]}
+    )
+    package_generator.generate_setuptools_package(name="extrapackage")
+    requirements = RequirementSet(target_platform=current_platform)
+    requirements.add(requirement_parser.parse("testpackage[extra]"))
+    pip.install(
+        requirements,
+        source_directories=[target_directory],
+        target_directory=install_target,
+    )
+    installed_packages = pip.freeze([install_target])
+    assert "extrapackage" in installed_packages
+
+
 @pytest.fixture
 def pip(
     logger: Logger,

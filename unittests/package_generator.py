@@ -1,6 +1,7 @@
 import shutil
 import subprocess
 from tempfile import TemporaryDirectory
+from typing import Dict
 from typing import List
 
 from attr import attrib
@@ -29,7 +30,11 @@ class PackageGenerator:
     _logger: Logger = attrib()
 
     def generate_setuptools_package(
-        self, name: str, version: str = "1.0", install_requires: List[str] = []
+        self,
+        name: str,
+        version: str = "1.0",
+        install_requires: List[str] = [],
+        extras_require: Dict[str, List[str]] = {},
     ) -> SourceDistribution:
         with TemporaryDirectory() as directory_path_string:
             build_directory: Path = Path(directory_path_string)
@@ -39,6 +44,7 @@ class PackageGenerator:
                 name=name,
                 version=version,
                 install_requires=install_requires,
+                extras_require=extras_require,
             )
             built_distribution_archive = self._build_package(
                 build_directory=build_directory, name=name, version=version
@@ -63,6 +69,7 @@ class PackageGenerator:
         name: str,
         version: str,
         install_requires: List[str],
+        extras_require: Dict[str, List[str]],
     ) -> None:
         content = render_template(
             Path("setup.cfg"),
@@ -70,8 +77,10 @@ class PackageGenerator:
                 "name": name,
                 "version": version,
                 "install_requires": install_requires,
+                "extras_require": extras_require,
             },
         )
+        print(content)
         (target_directory / "setup.cfg").write_text(content)
 
     def _build_package(self, build_directory: Path, name: str, version: str) -> Archive:
