@@ -5,7 +5,7 @@ from typing import List
 
 from pypi2nix.configuration import ApplicationConfiguration
 from pypi2nix.dependency_graph import DependencyGraph
-from pypi2nix.expression_renderer import render_expression
+from pypi2nix.expression_renderer import RequirementsRenderer
 from pypi2nix.external_dependencies import ExternalDependency
 from pypi2nix.external_dependency_collector import ExternalDependencyCollector
 from pypi2nix.external_dependency_collector import RequirementDependencyRetriever
@@ -93,22 +93,23 @@ class Pypi2nix:
         )
         self.logger().info("Generating Nix expressions ...")
 
-        render_expression(
-            packages_metadata=packages_metadata,
-            sources=sources,
+        renderer = RequirementsRenderer(
             requirements_name=requirements_name,
-            requirements_frozen=requirements_frozen,
             extra_build_inputs=(
                 self.configuration.extra_build_inputs
                 if self.configuration.emit_extra_build_inputs
                 else []
             ),
-            enable_tests=self.configuration.enable_tests,
             python_version=self.configuration.python_version,
             target_directory=self.configuration.target_directory,
             logger=self.logger(),
             common_overrides=self.configuration.overrides,
             target_platform=self.target_platform(),
+        )
+        renderer.render_expression(
+            packages_metadata=packages_metadata,
+            sources=sources,
+            requirements_frozen=requirements_frozen,
         )
         if self.configuration.dependency_graph_output_location:
             dependency_graph = DependencyGraph()
