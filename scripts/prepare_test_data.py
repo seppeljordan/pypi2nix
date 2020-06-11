@@ -12,7 +12,7 @@ wheel_target_directory = ROOT / "unittests" / "data"
 TEST_PACKAGES = ["setupcfg-package", "package1", "package2", "package3", "package4"]
 
 
-def build_test_package(package_name: str):
+def build_test_package(package_name: str) -> None:
     os.putenv("SOURCE_DATE_EPOCH", "315532800")
     package_name_with_underscores = package_name.replace("-", "_")
     package_dir = ROOT / "unittests" / "data" / package_name
@@ -35,7 +35,7 @@ def build_test_package(package_name: str):
     build_wheel(wheel_target_directory, str(package_dir))
 
 
-def download_flit_wheel():
+def download_flit_wheel() -> None:
     build_wheel(wheel_target_directory, "flit==1.3")
 
 

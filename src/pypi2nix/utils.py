@@ -33,29 +33,29 @@ def cmd(
     logger: Logger,
     stderr: Optional[int] = None,
     cwd: Optional[str] = None,
+    input: Optional[str] = None,
 ) -> Tuple[int, str]:
     if isinstance(command, str):
         command = shlex.split(command)
 
     logger.debug("|-> " + " ".join(map(shlex.quote, command)))
 
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=stderr, cwd=cwd)
-
+    p = subprocess.Popen(
+        command,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=stderr,
+        cwd=cwd,
+        universal_newlines=True,
+    )
     try:
-        out = []
-        while True:
-            line = p.stdout.readline().decode()
-            if line == "" and p.poll() is not None:
-                break
-            if line != "":
-                logger.debug("    " + line.rstrip("\n"))
-                out.append(line)
+        out, _ = p.communicate(input)
     except Exception:
         p.kill()
-        raise
-    else:
         p.communicate()
-    return p.returncode, "".join(out)
+        raise
+    logger.debug(out)
+    return p.returncode, out
 
 
 def create_command_options(options: Dict[str, NixOption],) -> List[str]:

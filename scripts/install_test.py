@@ -7,7 +7,7 @@ import subprocess
 from pypi2nix.version import pypi2nix_version
 
 
-def main():
+def main() -> None:
     set_up_environment()
     create_virtual_env()
     create_sdist()
@@ -19,17 +19,17 @@ def main():
     run_help_command()
 
 
-def set_up_environment():
+def set_up_environment() -> None:
     os.putenv("SOURCE_DATE_EPOCH", "315532800")
     os.unsetenv("PYTHONPATH")
 
 
-def create_sdist():
+def create_sdist() -> None:
     shutil.rmtree(os.path.join("src", "pypi2nix.egg-info"), ignore_errors=True)
     subprocess.run(["build/venv/bin/python", "setup.py", "sdist"], check=True)
 
 
-def create_virtual_env():
+def create_virtual_env() -> None:
     os.makedirs("build", exist_ok=True)
     try:
         shutil.rmtree("build/venv")
@@ -38,7 +38,7 @@ def create_virtual_env():
     subprocess.run(["python", "-m", "venv", "build/venv"], check=True)
 
 
-def create_wheel():
+def create_wheel() -> None:
     shutil.rmtree(os.path.join("src", "pypi2nix.egg-info"), ignore_errors=True)
     subprocess.run(
         ["build/venv/bin/python", "-m", "pip", "install", "wheel"], check=True
@@ -46,7 +46,7 @@ def create_wheel():
     subprocess.run(["build/venv/bin/python", "setup.py", "bdist_wheel"], check=True)
 
 
-def install_sdist():
+def install_sdist() -> None:
     subprocess.run(
         [
             "build/venv/bin/python",
@@ -59,7 +59,7 @@ def install_sdist():
     )
 
 
-def install_wheel():
+def install_wheel() -> None:
     subprocess.run(
         [
             "build/venv/bin/python",
@@ -72,7 +72,7 @@ def install_wheel():
     )
 
 
-def run_help_command():
+def run_help_command() -> None:
     subprocess.run(["build/venv/bin/pypi2nix", "--help"], check=True)
 
 

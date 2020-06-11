@@ -1,1 +1,3 @@
-
+Click==7.0
+flit==2.2
+flit-core==2.2

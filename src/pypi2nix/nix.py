@@ -91,14 +91,16 @@ class Nix:
             + create_command_options(arguments),
         )
 
-    def run_nix_command(self, binary_name: str, command: List[str]) -> str:
+    def run_nix_command(
+        self, binary_name: str, command: List[str], input: Optional[str] = None,
+    ) -> str:
         final_command = (
             [self.executable_path(binary_name)] + self.nix_path_arguments() + command
         )
         returncode: int
         output: str
         try:
-            returncode, output = cmd(final_command, self.logger)
+            returncode, output = cmd(final_command, self.logger, input=input)
         except FileNotFoundError:
             raise ExecutableNotFound(
                 "Could not find executable '{program}'".format(program=binary_name)

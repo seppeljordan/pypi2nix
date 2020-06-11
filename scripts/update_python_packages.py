@@ -10,7 +10,7 @@ from pypi2nix.wheels import Index
 from repository import ROOT
 
 
-def main():
+def main() -> None:
     logger = StreamLogger(sys.stdout)
     pypi = Pypi(logger=logger)
     pip_requirements: List[str] = ["setuptools", "wheel", "pip"]

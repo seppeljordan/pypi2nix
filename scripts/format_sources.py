@@ -36,7 +36,7 @@ class CodeFormatter:
         self.run_check_process("flake8")
         self.run_check_process("mypy")
 
-    def run_check_process(self, executable, arguments: List[str] = []):
+    def run_check_process(self, executable: str, arguments: List[str] = []) -> None:
         self._logger.info(f"Running {executable}")
         try:
             subprocess.run([executable] + arguments, check=True)

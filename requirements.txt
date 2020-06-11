@@ -1,7 +1,7 @@
 attrs
 click
 jinja2
-nix-prefetch-github
+git+https://github.com/seppeljordan/nix-prefetch-github.git#egg=nix-prefetch-github
 parsley
 toml
 packaging

@@ -1,41 +1,44 @@
 #!/usr/bin/env python
-
 import argparse
 import shlex
 import subprocess
+from typing import List
+from typing import Optional
 
+from pypi2nix.path import Path
 from repository import ROOT
 
 
-def generator(iterable):
-    yield from iterable
-
-
-def parse_args():
+def parse_args() -> Optional[Path]:
     parser = argparse.ArgumentParser()
     parser.add_argument("--file", default=None)
-    args = parser.parse_args()
-    return args.file
+    candidate: Optional[str] = parser.parse_args().file
+    return None if candidate is None else Path(candidate)
 
 
-def run_tests_from_file(path: str) -> None:
-    command = ["python", "-m", "unittest", path, "-k", "TestCase"]
+def run_tests_from_files(paths: List[Path]) -> None:
+    junit_output_path = ROOT / "build"
+    junit_output_path.ensure_directory()
+    junit_output_path /= "integration_tests.xml"
+    command = ["pytest", "--junit-xml", str(junit_output_path), "-k", "TestCase"] + [
+        str(path) for path in paths
+    ]
     print("Executing test: ", " ".join(map(shlex.quote, command)))
     subprocess.run(command, check=True)
 
 
-def main():
+def main() -> None:
+    files: List[Path]
     file = parse_args()
     if file:
-        files = generator([file])
+        files = [file]
     else:
-        files = (
+        files = [
             ROOT / "integrationtests" / name
             for name in (ROOT / "integrationtests").list_files()
             if name.filename().startswith("test_") and name.endswith(".py")
-        )
-    for path in files:
-        run_tests_from_file(str(path))
+        ]
+    run_tests_from_files(files)
 
 
 if __name__ == "__main__":

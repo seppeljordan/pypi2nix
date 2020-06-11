@@ -7,7 +7,7 @@ from repository import ROOT
 
 
 def main() -> None:
-    arguments = parse_arguments()
+    is_verbose: bool = parse_arguments()
     subprocess.run(
         [
             "pypi2nix",
@@ -23,13 +23,13 @@ def main() -> None:
             "-E",
             "openssl libffi",
         ]
-        + (["-v"] if arguments.verbose else []),
+        + (["-v"] if is_verbose else []),
         cwd=str(ROOT),
         check=True,
     )
 
 
-def parse_arguments():
+def parse_arguments() -> bool:
     argument_parser = argparse.ArgumentParser(
         description="Update development dependencies of pypi2nix"
     )
@@ -41,7 +41,7 @@ def parse_arguments():
         action="store_true",
     )
     args = argument_parser.parse_args()
-    return args
+    return True if args.verbose else False
 
 
 if __name__ == "__main__":

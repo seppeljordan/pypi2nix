@@ -1,5 +1,6 @@
 import os
 import os.path
+import shlex
 import shutil
 import subprocess
 import sys
@@ -198,24 +199,20 @@ class IntegrationTest(TestCase):
 
     def run_interpreter_with_test_code_in_nix_shell(self, test_code: str) -> None:
         print("Execute test code in nix-shell")
-        test_command_line = [
-            "nix",
-            "run",
-            "--show-trace",
-            "-f",
-            os.path.join(self.example_directory(), "requirements.nix"),
-            "interpreter",
-            "--command",
-            "python",
-        ]
-        process = subprocess.Popen(
-            test_command_line,
-            cwd=os.path.join(self.example_directory(), "result", "bin"),
-            env=self.nix_build_env(),
-            stdin=subprocess.PIPE,
-        )
-        process.communicate(input=test_code.encode())
-        if process.returncode != 0:
+        try:
+            self.nix.run_nix_command(
+                "nix-shell",
+                [
+                    os.path.join(self.example_directory(), "requirements.nix"),
+                    "-A",
+                    "interpreter",
+                    "--command",
+                    "python",
+                    "--show-trace",
+                ],
+                input=test_code,
+            )
+        except EvaluationFailed:
             self.fail("Executation of test code in nix-shell failed")
 
     def read_requirements_file_contents(self) -> str:
@@ -245,33 +242,7 @@ class IntegrationTest(TestCase):
 
     def run_executable_tests(self) -> None:
         for test_command in self.executables_for_testing():
-            self.run_test_command_in_shell(test_command)
             self.run_test_command_from_build_output(test_command)
-
-    def run_test_command_in_shell(self, test_command: "TestCommand") -> None:
-        print("Run {command} in nix-shell".format(command=test_command))
-        test_command_line = [
-            "nix",
-            "run",
-            "--show-trace",
-            "-f",
-            os.path.join(self.example_directory(), "requirements.nix"),
-            "interpreter",
-            "--command",
-        ] + test_command.command
-        process = subprocess.Popen(
-            test_command_line,
-            cwd=os.path.join(self.example_directory(), "result", "bin"),
-            env=dict(self.nix_build_env(), **test_command.env),
-        )
-        process.communicate()
-        print()  # for empty line after command output
-        if process.returncode != 0:
-            self.fail(
-                "Tested executable `{command}` returned non-zero exitcode.".format(
-                    command=test_command
-                )
-            )
 
     def run_test_command_from_build_output(self, test_command: "TestCommand") -> None:
         prepared_test_command = evolve(
@@ -302,16 +273,13 @@ class IntegrationTest(TestCase):
         return environment_variables
 
     def generate_requirements_file_content(self) -> str:
-        if self.constraints:
-            self.generate_constraints_txt()
-            requirements_txt_extra_content = ["-c " + self.constraints_txt_path()]
-        else:
-            requirements_txt_extra_content = []
+        self.generate_constraints_txt()
+        requirements_txt_extra_content = ["-c " + self.constraints_txt_path()]
         return "\n".join(self.requirements + requirements_txt_extra_content)
 
     def generate_constraints_txt(self) -> None:
         with open(self.constraints_txt_path(), "w") as f:
-            f.write("\n".join(self.constraints))
+            f.write("\n".join(self._constraints()))
 
     def constraints_txt_path(self) -> str:
         return os.path.join(self.example_directory(), "constraints.txt")
@@ -350,6 +318,17 @@ class IntegrationTest(TestCase):
         with open(self._dependency_graph_output_path()) as f:
             return DependencyGraph.deserialize(f.read())
 
+    def _constraints(self) -> List[str]:
+        return self.constraints + self._read_global_constraints()
+
+    def _read_global_constraints(self) -> List[str]:
+        global_constraints_path = os.path.join(
+            os.path.dirname(self.example_directory()), "constraints.txt"
+        )
+        with open(global_constraints_path) as f:
+            content = f.read()
+        return content.splitlines()
+
     constraints: List[str] = []
     python_version: str = "python3"
     requirements: List[str] = []
@@ -373,3 +352,9 @@ class IntegrationTest(TestCase):
 class TestCommand:
     command: List[str] = attrib()
     env: Dict[str, str] = attrib(default=dict())
+
+    def unquoted_command(self) -> str:
+        return " ".join(self.command)
+
+    def quoted_command(self) -> str:
+        return shlex.quote(self.unquoted_command())
