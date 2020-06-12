@@ -9,7 +9,7 @@ from build_wheel import build_wheel
 from repository import ROOT
 
 wheel_target_directory = ROOT / "unittests" / "data"
-TEST_PACKAGES = ["setupcfg-package", "package1", "package2", "package3", "package4"]
+TEST_PACKAGES = ["setupcfg-package"]
 
 
 def build_test_package(package_name: str) -> None:

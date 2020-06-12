@@ -159,8 +159,8 @@ def pip(
     logger: Logger,
     current_platform: TargetPlatform,
     project_dir: str,
-    wheel_distribution_archive_path: str,
     data_directory: str,
+    wheel_distribution_archive_path: str,
     requirement_parser: RequirementParser,
     package_source_directory: Path,
 ) -> VirtualenvPip:
@@ -171,7 +171,7 @@ def pip(
         env_builder=venv.EnvBuilder(with_pip=True),
         no_index=True,
         wheel_distribution_path=wheel_distribution_archive_path,
-        find_links=[str(package_source_directory)],
+        find_links=[data_directory, str(package_source_directory)],
         requirement_parser=requirement_parser,
     )
     pip.prepare_virtualenv()
@@ -243,7 +243,7 @@ def wheel_distribution_archive_path(data_directory):
 @pytest.fixture
 def sources_for_test_packages(data_directory):
     sources = Sources()
-    package_names = ["setupcfg-package", "package1", "package2", "package3", "package4"]
+    package_names = ["setupcfg-package"]
     for package_name in package_names:
         sources.add(
             package_name,
@@ -276,13 +276,20 @@ def package_source_directory(tmpdir_factory: Any) -> Path:
 
 
 @pytest.fixture
+def generated_sources() -> Sources:
+    return Sources()
+
+
+@pytest.fixture
 def package_generator(
     package_source_directory: Path,
     logger: Logger,
     requirement_parser: RequirementParser,
+    generated_sources: Sources,
 ) -> PackageGenerator:
     return PackageGenerator(
-        target_directory=pathlib.Path(str(package_source_directory)),
+        target_directory=package_source_directory,
         requirement_parser=requirement_parser,
         logger=logger,
+        sources=generated_sources,
     )

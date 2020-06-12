@@ -21,8 +21,8 @@ def build_wheels(
     wheel_builder: WheelBuilder,
     current_platform: TargetPlatform,
     requirement_parser: RequirementParser,
+    generated_sources: Sources,
     logger: Logger,
-    sources_for_test_packages: Sources,
     pypi: Pypi,
 ):
     def wrapper(requirement_lines: List[str]) -> List[Wheel]:
@@ -31,7 +31,7 @@ def build_wheels(
             requirements.add(requirement_parser.parse(line))
         wheel_paths = wheel_builder.build(requirements)
         metadata_fetcher = MetadataFetcher(
-            sources_for_test_packages, logger, requirement_parser, pypi
+            generated_sources, logger, requirement_parser, pypi
         )
         return metadata_fetcher.main(
             wheel_paths, current_platform, wheel_builder.source_distributions

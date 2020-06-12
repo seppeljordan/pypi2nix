@@ -9,9 +9,11 @@ from attr import attrs
 
 from pypi2nix.archive import Archive
 from pypi2nix.logger import Logger
+from pypi2nix.package_source import PathSource
 from pypi2nix.path import Path
 from pypi2nix.requirement_parser import RequirementParser
 from pypi2nix.source_distribution import SourceDistribution
+from pypi2nix.sources import Sources
 
 from .templates import render_template
 
@@ -28,6 +30,7 @@ class PackageGenerator:
     _target_directory: Path = attrib()
     _requirement_parser: RequirementParser = attrib()
     _logger: Logger = attrib()
+    _sources: Sources = attrib()
 
     def generate_setuptools_package(
         self,
@@ -55,6 +58,10 @@ class PackageGenerator:
                 requirement_parser=self._requirement_parser,
             )
             self._move_package_target_directory(built_distribution_archive)
+            self._sources.add(
+                name=name,
+                source=PathSource(path=self._get_distribution_path(name, version)),
+            )
         return source_distribution
 
     def _generate_setup_py(
@@ -88,6 +95,9 @@ class PackageGenerator:
         )
         tar_gz_path = build_directory / "dist" / f"{name}-{version}.tar.gz"
         return Archive(path=str(tar_gz_path))
+
+    def _get_distribution_path(self, name, version):
+        return self._target_directory / f"{name}-{version}.tar.gz"
 
     def _move_package_target_directory(self, distribution_archive: Archive) -> None:
         shutil.copy(distribution_archive.path, str(self._target_directory))

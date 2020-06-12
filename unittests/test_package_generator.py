@@ -8,6 +8,7 @@ from pypi2nix.pip import Pip
 from pypi2nix.pip.virtualenv import VirtualenvPip
 from pypi2nix.requirement_parser import RequirementParser
 from pypi2nix.requirement_set import RequirementSet
+from pypi2nix.sources import Sources
 from pypi2nix.target_platform import TargetPlatform
 
 from .package_generator import PackageGenerator
@@ -148,11 +149,20 @@ def install_target(tmpdir_factory) -> Path:
 
 
 @pytest.fixture
+def generated_sources() -> Sources:
+    return Sources()
+
+
+@pytest.fixture
 def package_generator(
-    logger: Logger, target_directory: Path, requirement_parser: RequirementParser
+    logger: Logger,
+    target_directory: Path,
+    requirement_parser: RequirementParser,
+    generated_sources: Sources,
 ) -> PackageGenerator:
     return PackageGenerator(
         target_directory=target_directory,
         logger=logger,
         requirement_parser=requirement_parser,
+        sources=generated_sources,
     )
