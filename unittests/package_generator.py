@@ -80,7 +80,6 @@ class PackageGenerator:
                 "extras_require": extras_require,
             },
         )
-        print(content)
         (target_directory / "setup.cfg").write_text(content)
 
     def _build_package(self, build_directory: Path, name: str, version: str) -> Archive:

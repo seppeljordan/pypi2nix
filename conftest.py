@@ -171,7 +171,7 @@ def pip(
         env_builder=venv.EnvBuilder(with_pip=True),
         no_index=True,
         wheel_distribution_path=wheel_distribution_archive_path,
-        find_links=[data_directory, str(package_source_directory)],
+        find_links=[str(package_source_directory)],
         requirement_parser=requirement_parser,
     )
     pip.prepare_virtualenv()
