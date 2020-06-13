@@ -25,7 +25,7 @@ def set_up_environment() -> None:
 
 
 def create_sdist() -> None:
-    shutil.rmtree(os.path.join("src", "pypi2nix.egg-info"), ignore_errors=True)
+    shutil.rmtree(os.path.join("pypi2nix.egg-info"), ignore_errors=True)
     subprocess.run(["build/venv/bin/python", "setup.py", "sdist"], check=True)
 
 
@@ -39,7 +39,7 @@ def create_virtual_env() -> None:
 
 
 def create_wheel() -> None:
-    shutil.rmtree(os.path.join("src", "pypi2nix.egg-info"), ignore_errors=True)
+    shutil.rmtree(os.path.join("pypi2nix.egg-info"), ignore_errors=True)
     subprocess.run(
         ["build/venv/bin/python", "-m", "pip", "install", "wheel"], check=True
     )

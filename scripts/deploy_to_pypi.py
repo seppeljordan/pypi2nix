@@ -26,7 +26,7 @@ def parse_args() -> str:
 
 
 def remove_old_build_artifacts() -> None:
-    shutil.rmtree("src/pypi2nix.egg-info", ignore_errors=True)
+    shutil.rmtree("pypi2nix.egg-info", ignore_errors=True)
 
 
 def deploy_to(pypi_name: str) -> None:

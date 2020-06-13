@@ -11,7 +11,7 @@ from pypi2nix.nix import Nix
 from pypi2nix.path import Path
 from pypi2nix.requirement_parser import ParsingFailed
 from pypi2nix.requirement_parser import RequirementParser
-from repository import ROOT
+from scripts.repository import ROOT
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 DERIVATION_PATH = os.path.join(HERE, "build-pip.nix")

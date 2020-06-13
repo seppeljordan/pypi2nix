@@ -8,7 +8,7 @@ development environment.::
     % cd pypi2nix
     % nix-shell
 
-Code is located in ``src/pypi2nix``.
+Code is located in ``./pypi2nix``.
 
 Testing
 ^^^^^^^
@@ -69,7 +69,7 @@ build.  You can automatically format all code via the
 maintainance script from any working directory you like as long as you
 are inside the provided ``nix-shell`` environment. Example::
 
-    [nix-shell:~/src/pypi2nix]$ format_sources.py
+    [nix-shell:~/pypi2nix]$ format_sources.py
     Skipped 2 files
     All done! ✨ 🍰 ✨
     131 files left unchanged.

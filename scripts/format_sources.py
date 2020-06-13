@@ -8,7 +8,7 @@ from typing import List
 
 from pypi2nix.logger import Logger
 from pypi2nix.logger import StreamLogger
-from repository import ROOT
+from scripts.repository import ROOT
 
 
 class CodeFormatter:
@@ -17,7 +17,7 @@ class CodeFormatter:
 
     def main(self) -> None:
         relative_paths = [
-            "src",
+            "pypi2nix",
             "unittests",
             "integrationtests",
             "conftest.py",
@@ -49,7 +49,7 @@ class CodeFormatter:
             self._logger.info("Formatting nix files")
             integration_test_nix_files = find_nix_files_in_integration_tests()
             subprocess.run(
-                ["nixfmt", "default.nix", "src/pypi2nix/pip/bootstrap.nix"]
+                ["nixfmt", "default.nix", "pypi2nix/pip/bootstrap.nix"]
                 + integration_test_nix_files,
                 check=True,
             )

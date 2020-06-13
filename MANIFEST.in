@@ -1,4 +1,4 @@
-include src/pypi2nix/pip/*.nix
-include src/pypi2nix/templates/*.j2
-include src/pypi2nix/wheels/index.json
-include src/pypi2nix/VERSION
+include pypi2nix/pip/*.nix
+include pypi2nix/templates/*.j2
+include pypi2nix/wheels/index.json
+include pypi2nix/VERSION

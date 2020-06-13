@@ -5,7 +5,7 @@
 /deploy_rsa
 /out/
 /result*
-/src/pypi2nix.egg-info/
+/pypi2nix.egg-info/
 /integrationtests/*/requirements.nix
 /integrationtests/*/constraints.txt
 /integrationtests/*/requirements.txt
@@ -24,5 +24,5 @@
 *.egg-info
 **/.eggs/**
 .mypy_cache
-src/pypi2nix/_version.py
+pypi2nix/_version.py
 /.hypothesis

@@ -6,7 +6,7 @@ from typing import List
 from typing import Optional
 
 from pypi2nix.path import Path
-from repository import ROOT
+from scripts.repository import ROOT
 
 
 def parse_args() -> Optional[Path]:

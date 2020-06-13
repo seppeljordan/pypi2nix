@@ -9,8 +9,4 @@ nixpkgs.mkShell {
     git
     nix-prefetch-hg
   ];
-  shellHook = ''
-    export PATH=${./scripts}:$PATH
-    export PYTHONPATH=${./src}:$PYTHONPATH
-  '';
 }

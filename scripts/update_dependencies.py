@@ -3,7 +3,7 @@
 import argparse
 import subprocess
 
-from repository import ROOT
+from scripts.repository import ROOT
 
 
 def main() -> None:

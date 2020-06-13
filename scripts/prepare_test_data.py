@@ -5,8 +5,8 @@ import os
 import shutil
 import subprocess
 
-from build_wheel import build_wheel
-from repository import ROOT
+from scripts.build_wheel import build_wheel
+from scripts.repository import ROOT
 
 wheel_target_directory = ROOT / "unittests" / "data"
 TEST_PACKAGES = ["setupcfg-package"]
