@@ -10,6 +10,7 @@ import pytest
 from pypi2nix.dependency_graph import DependencyGraph
 from pypi2nix.logger import Logger
 from pypi2nix.package_source import PathSource
+from pypi2nix.path import Path
 from pypi2nix.requirement_parser import RequirementParser
 from pypi2nix.requirements import PathRequirement
 from pypi2nix.requirements_collector import RequirementsCollector
@@ -94,7 +95,7 @@ def test_that_relative_paths_are_preserved_in_sources(
     collector.add_line("path/to/egg#egg=testegg")
     testegg_source = collector.sources()["testegg"]
     assert isinstance(testegg_source, PathSource)
-    assert testegg_source.path == "path/to/egg"
+    assert testegg_source.path == Path("path/to/egg")
 
 
 def test_that_path_paths_from_requirement_files_are_preserved_in_sources(
@@ -107,7 +108,7 @@ def test_that_path_paths_from_requirement_files_are_preserved_in_sources(
         collector.add_file(str(requirements_file_path))
         testegg_source = collector.sources()["testegg"]
         assert isinstance(testegg_source, PathSource)
-        assert testegg_source.path == "path/to/egg"
+        assert testegg_source.path == Path("path/to/egg")
 
 
 def test_that_path_sources_from_requirement_files_are_preserved_in_sources_relative_to_file(
@@ -122,4 +123,4 @@ def test_that_path_sources_from_requirement_files_are_preserved_in_sources_relat
         collector.add_file(str(requirements_file_path))
         testegg_source = collector.sources()["testegg"]
         assert isinstance(testegg_source, PathSource)
-        assert testegg_source.path == "directory/path/to/egg"
+        assert testegg_source.path == Path("directory/path/to/egg")

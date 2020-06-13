@@ -14,7 +14,7 @@ from nix_prefetch_github import nix_prefetch_github
 from pypi2nix.logger import Logger
 from pypi2nix.path import Path
 
-NixOption = Union[str, List[str], bool, Path, List[Path]]
+NixOption = Union[str, List[str], bool, Path, List["Path"]]
 
 HERE = os.path.dirname(__file__)
 
@@ -81,40 +81,22 @@ def args_as_list(inputs: List[str]) -> List[str]:
     return list(filter(lambda x: x != "", (" ".join(inputs)).split(" ")))
 
 
-def prefetch_git(url: str, rev: Optional[str] = None) -> Dict[str, str]:
+def prefetch_git(url: str, logger: Logger, rev: Optional[str] = None) -> Dict[str, str]:
     command = ["nix-prefetch-git", url]
 
     if rev is not None:
         command += ["--rev", rev]
-    try:
-        completed_proc = subprocess.run(
-            command,
-            universal_newlines=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-    except FileNotFoundError:
-        raise click.ClickException(
-            "Could not find executable `nix-prefetch-git`.  "
-            "Make sure it is installed correctly and available in "
-            "$PATH."
-        )
 
-    returncode = completed_proc.returncode
+    returncode, output = cmd(command, logger=logger, input="")
 
     if returncode != 0:
         raise click.ClickException(
             (
-                "Could not fetch git repository at {url}, git returncode was "
-                "{code}. stdout:\n{stdout}\nstderr:\n{stderr}"
-            ).format(
-                url=url,
-                code=returncode,
-                stdout=completed_proc.stdout,
-                stderr=completed_proc.stderr,
+                f"Could not fetch git repository at {url}, git returncode was "
+                f"{returncode}. output:\n{output}"
             )
         )
-    repo_data = json.loads(completed_proc.stdout)
+    repo_data = json.loads(output)
     return repo_data  # type: ignore
 
 

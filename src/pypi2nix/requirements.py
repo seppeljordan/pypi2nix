@@ -155,9 +155,9 @@ class UrlRequirement(Requirement):
         try:
             url, rev = url.split("@")
         except ValueError:
-            return GitSource(url=url)
+            return GitSource(url=url, logger=self._logger)
         else:
-            return GitSource(url=url, revision=rev)
+            return GitSource(url=url, logger=self._logger, revision=rev)
 
     def to_line(self) -> str:
         extras = "[" + ",".join(self.extras()) + "]" if self.extras() else ""

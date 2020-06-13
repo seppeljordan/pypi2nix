@@ -4,6 +4,7 @@ from typing import List
 from typing import Optional
 
 from pypi2nix.logger import Logger
+from pypi2nix.path import Path
 from pypi2nix.utils import NixOption
 from pypi2nix.utils import cmd
 from pypi2nix.utils import create_command_options
@@ -65,6 +66,18 @@ class Nix:
             + (["-o", out_link] if out_link else [])
             + (["-A", attribute] if attribute else [])
             + create_command_options(arguments),
+        )
+
+    def build_flake(
+        self,
+        source_directory: Path,
+        attribute: Optional[str] = None,
+        out_link: Optional[Path] = None,
+    ) -> None:
+        self.run_nix_command(
+            "nix",
+            ["build", str(source_directory) + (f"#{attribute}" if attribute else "")]
+            + (["--out-link", str(out_link)] if out_link else ["--no-link"]),
         )
 
     def evaluate_file(self, source_file: str, attribute: Optional[str] = None) -> None:

@@ -83,7 +83,7 @@ class GitTextFile(NetworkFile):
     @property  # type: ignore
     @memoize
     def _prefetch_data(self) -> Dict[str, str]:
-        return prefetch_git(self.repository_url, self._revision_name)
+        return prefetch_git(self.repository_url, self._logger, self._revision_name)
 
     @memoize
     def fetch(self) -> str:

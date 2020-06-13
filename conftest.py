@@ -5,6 +5,7 @@ import venv
 from io import StringIO
 from typing import Any
 from typing import Generator
+from typing import List
 
 import pytest
 
@@ -12,6 +13,7 @@ from pypi2nix.archive import Archive
 from pypi2nix.dependency_graph import DependencyGraph
 from pypi2nix.logger import Logger
 from pypi2nix.logger import StreamLogger
+from pypi2nix.metadata_fetcher import MetadataFetcher
 from pypi2nix.nix import Nix
 from pypi2nix.package_source import PathSource
 from pypi2nix.path import Path
@@ -293,3 +295,27 @@ def package_generator(
         logger=logger,
         sources=generated_sources,
     )
+
+
+@pytest.fixture
+def build_wheels(
+    wheel_builder: WheelBuilder,
+    current_platform: TargetPlatform,
+    requirement_parser: RequirementParser,
+    generated_sources: Sources,
+    logger: Logger,
+    pypi: Pypi,
+):
+    def wrapper(requirement_lines: List[str]) -> List[Wheel]:
+        requirements = RequirementSet(current_platform)
+        for line in requirement_lines:
+            requirements.add(requirement_parser.parse(line))
+        wheel_paths = wheel_builder.build(requirements)
+        metadata_fetcher = MetadataFetcher(
+            generated_sources, logger, requirement_parser, pypi
+        )
+        return metadata_fetcher.main(
+            wheel_paths, current_platform, wheel_builder.source_distributions
+        )
+
+    return wrapper

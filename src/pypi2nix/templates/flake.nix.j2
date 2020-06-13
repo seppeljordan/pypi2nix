@@ -1,0 +1,88 @@
+# -*- mode: nix -*-
+{
+  description = "Python interpreter bundled with packages";
+  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-20.03;
+  outputs = {self, nixpkgs}:
+    let
+      systems = ["x86_64-linux"];
+      withSystem = f: builtins.listToAttrs
+        (builtins.map (system:
+          {
+            name = system;
+            value = f system;
+          }
+        ) systems);
+    in
+      {
+        defaultPackage = withSystem ( system:
+          self.packages."${system}".interpreter
+        );
+        packages = withSystem (system:
+          let
+            pkgs = nixpkgs.legacyPackages."${system}";
+            python = pkgs.python3;
+            commonBuildInputs = with pkgs; [ {{ extra_build_inputs }} ];
+            generatedPackages = self: {
+              {% for package in packages %}
+              "{{ package.name }}" = python.pkgs.buildPythonPackage {
+                name = "{{ package.name }}-{{ package.version }}";
+                src = {{ package.fetch_expression }};
+                doCheck = false;
+                format = "{{ package.format }}";
+                buildInputs = commonBuildInputs ++ (with self;
+                  [
+                    {% for input in package.build_dependencies %} {{ input }} {% endfor %}
+                  ]);
+                propagatedBuildInputs = (with self;
+                  [
+                    {% for input in package.runtime_dependencies %} {{ input }} {% endfor %}
+                  ]);
+                meta = with pkgs.lib; {
+                  homepage = "{{ package.homepage }}";
+                  license = {{ package.license }};
+                  description = "{{ package.description }}";
+                };
+              };
+              {% endfor %}
+            };
+            overrides = with pkgs.lib;
+              fold composeExtensions (self: super: {}) [
+                {{ common_overrides }}
+              ];
+            pythonPackages = with pkgs.lib;
+              fix (extends overrides generatedPackages);
+            interpreterWithPackages = selectPkgsFn: python.pkgs.buildPythonPackage {
+              name = "python3-interpreter";
+              buildInputs = [ pkgs.makeWrapper ] ++ (selectPkgsFn pythonPackages);
+              buildCommand = ''
+                mkdir -p $out/bin
+                ln -s ${python.interpreter} \
+                    $out/bin/${python.executable}
+                for dep in ${builtins.concatStringsSep " "
+                    (selectPkgsFn pythonPackages)}; do
+                  if [ -d "$dep/bin" ]; then
+                    for prog in "$dep/bin/"*; do
+                      if [ -x "$prog" ] && [ -f "$prog" ]; then
+                        ln -s $prog $out/bin/`basename $prog`
+                      fi
+                    done
+                  fi
+                done
+                for prog in "$out/bin/"*; do
+                  wrapProgram "$prog" --prefix PYTHONPATH : "$PYTHONPATH"
+                done
+                pushd $out/bin
+                ln -s ${python.executable} python
+                ln -s ${python.executable} python3
+                popd
+              '';
+              passthru.interpreter = pythonPackages.python;
+            };
+            interpreter = interpreterWithPackages builtins.attrValues;
+          in
+          {
+            inherit python interpreterWithPackages interpreter;
+          }
+        );
+      };
+}

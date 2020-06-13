@@ -49,6 +49,9 @@ class PackageGenerator:
                 install_requires=install_requires,
                 extras_require=extras_require,
             )
+            self._generate_python_module(
+                build_directory, name=name,
+            )
             built_distribution_archive = self._build_package(
                 build_directory=build_directory, name=name, version=version
             )
@@ -60,7 +63,7 @@ class PackageGenerator:
             self._move_package_target_directory(built_distribution_archive)
             self._sources.add(
                 name=name,
-                source=PathSource(path=self._get_distribution_path(name, version)),
+                source=PathSource(path=str(self._get_distribution_path(name, version))),
             )
         return source_distribution
 
@@ -88,6 +91,9 @@ class PackageGenerator:
             },
         )
         (target_directory / "setup.cfg").write_text(content)
+
+    def _generate_python_module(self, target_directory: Path, name: str,) -> None:
+        (target_directory / f"{name}.py").write_text("")
 
     def _build_package(self, build_directory: Path, name: str, version: str) -> Archive:
         subprocess.run(

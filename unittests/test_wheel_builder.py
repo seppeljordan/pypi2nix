@@ -1,43 +1,5 @@
-from typing import List
-
-import pytest
-
-from pypi2nix.logger import Logger
-from pypi2nix.metadata_fetcher import MetadataFetcher
-from pypi2nix.pypi import Pypi
-from pypi2nix.requirement_parser import RequirementParser
-from pypi2nix.requirement_set import RequirementSet
-from pypi2nix.sources import Sources
-from pypi2nix.target_platform import TargetPlatform
-from pypi2nix.wheel import Wheel
-from pypi2nix.wheel_builder import WheelBuilder
-
 from .package_generator import PackageGenerator
 from .switches import nix
-
-
-@pytest.fixture
-def build_wheels(
-    wheel_builder: WheelBuilder,
-    current_platform: TargetPlatform,
-    requirement_parser: RequirementParser,
-    generated_sources: Sources,
-    logger: Logger,
-    pypi: Pypi,
-):
-    def wrapper(requirement_lines: List[str]) -> List[Wheel]:
-        requirements = RequirementSet(current_platform)
-        for line in requirement_lines:
-            requirements.add(requirement_parser.parse(line))
-        wheel_paths = wheel_builder.build(requirements)
-        metadata_fetcher = MetadataFetcher(
-            generated_sources, logger, requirement_parser, pypi
-        )
-        return metadata_fetcher.main(
-            wheel_paths, current_platform, wheel_builder.source_distributions
-        )
-
-    return wrapper
 
 
 @nix

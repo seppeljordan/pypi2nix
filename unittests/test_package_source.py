@@ -1,10 +1,12 @@
 import pytest
 
+from pypi2nix.logger import Logger
 from pypi2nix.nix import Nix
 from pypi2nix.package_source import GitSource
 from pypi2nix.package_source import HgSource
 from pypi2nix.package_source import PathSource
 from pypi2nix.package_source import UrlSource
+from pypi2nix.path import Path
 
 from .switches import nix
 
@@ -13,34 +15,36 @@ URL_SOURCE_HASH = "1x3dzqlnryplmxm3z1lnl40y0i2g8n6iynlngq2kkknxj9knjyhv"
 
 
 @pytest.fixture
-def git_source():
+def git_source(logger: Logger):
     return GitSource(
         url="https://github.com/nix-community/pypi2nix.git",
+        logger=logger,
         revision="4e85fe7505dd7e703aacc18d9ef45f7e47947a6a",
     )
 
 
 @pytest.fixture
-def hg_source(logger):
+def hg_source(logger: Logger):
     return HgSource(
         url="https://bitbucket.org/tarek/flake8", revision="a209fb69350c", logger=logger
     )
 
 
 @pytest.fixture
-def url_source(logger):
+def url_source(logger: Logger):
     return UrlSource(url=URL_SOURCE_URL, logger=logger)
 
 
 @pytest.fixture
-def path_source():
-    return PathSource("/test/path")
+def path_source(tmpdir_factory):
+    path = Path(str(tmpdir_factory.mktemp("path_source") / "test.txt"))
+    path.write_text("")
+    return PathSource(str(path))
 
 
 @pytest.fixture
-def expression_evaluater(logger):
-    nix_instance = Nix(logger=logger)
-    return lambda expression: nix_instance.evaluate_expression(
+def expression_evaluater(nix: Nix):
+    return lambda expression: nix.evaluate_expression(
         "let pkgs = import <nixpkgs> {}; in " + expression
     )
 
@@ -93,8 +97,3 @@ def test_url_source_nix_expression_contains_specified_hash_when_given(logger):
 @nix
 def test_path_source_gives_valid_nix_expression(path_source, expression_evaluater):
     expression_evaluater(path_source.nix_expression())
-
-
-def test_path_source_paths_with_one_segement_get_dot_appended_for_nix():
-    source = PathSource("segment")
-    assert source.nix_expression() == "segment/."

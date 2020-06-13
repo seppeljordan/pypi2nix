@@ -17,7 +17,7 @@ class PackageSource:
         if url is None:
             self._log_no_update_warning(package_name)
             return
-        repo_data = prefetch_git(url)
+        repo_data = prefetch_git(url, logger=self.logger)
         self.index[package_name] = Index.GitEntry(
             url=repo_data["url"], rev=repo_data["rev"], sha256=repo_data["sha256"],
         )

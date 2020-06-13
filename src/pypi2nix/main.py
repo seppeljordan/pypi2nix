@@ -107,10 +107,9 @@ class Pypi2nix:
             target_platform=self.target_platform(),
         )
         renderer.render_expression(
-            packages_metadata=packages_metadata,
-            sources=sources,
-            requirements_frozen=requirements_frozen,
+            packages_metadata=packages_metadata, sources=sources,
         )
+        renderer.render_requirements_frozen(requirements_frozen=requirements_frozen,)
         if self.configuration.dependency_graph_output_location:
             dependency_graph = DependencyGraph()
             for wheel in packages_metadata:

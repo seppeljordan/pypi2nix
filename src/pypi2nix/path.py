@@ -3,8 +3,11 @@ from __future__ import annotations
 import os
 import os.path
 import pathlib
+from hashlib import sha256
 from typing import List
 from typing import Union
+
+from pypi2nix.hash import to_base32
 
 
 class Path:
@@ -26,6 +29,14 @@ class Path:
     def ensure_directory(self) -> None:
         return os.makedirs(self._path, exist_ok=True)
 
+    def read_text(self) -> str:
+        with open(self._path) as f:
+            return f.read()
+
+    def read_binary(self) -> bytes:
+        with open(self._path, "rb") as f:
+            return f.read()
+
     def write_text(self, text: str) -> None:
         self._path.write_text(text)
 
@@ -40,6 +51,12 @@ class Path:
 
     def resolve(self) -> Path:
         return Path(self._path.resolve())
+
+    def exists(self) -> bool:
+        return os.path.exists(self._path)
+
+    def sha256_sum(self) -> str:
+        return to_base32(sha256(self.read_binary()).hexdigest())
 
     def __truediv__(self, other: Union[str, Path]) -> Path:
         if isinstance(other, str):

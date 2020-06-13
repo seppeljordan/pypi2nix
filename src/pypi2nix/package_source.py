@@ -1,9 +1,9 @@
-import os.path
 from typing import Dict
 from typing import Optional
 from typing import Union
 
 from pypi2nix.logger import Logger
+from pypi2nix.path import Path
 from pypi2nix.utils import prefetch_git
 from pypi2nix.utils import prefetch_hg
 from pypi2nix.utils import prefetch_url
@@ -12,10 +12,11 @@ PackageSource = Union["GitSource", "HgSource", "PathSource", "UrlSource"]
 
 
 class GitSource:
-    def __init__(self, url: str, revision: Optional[str] = None):
+    def __init__(self, url: str, logger: Logger, revision: Optional[str] = None):
         self.url = url
         self._prefetch_data: Optional[Dict[str, str]] = None
         self._revision = revision
+        self._logger = logger
 
     def nix_expression(self) -> str:
         return "\n".join(
@@ -41,7 +42,7 @@ class GitSource:
 
     def prefetch_data(self) -> Dict[str, str]:
         if self._prefetch_data is None:
-            self._prefetch_data = prefetch_git(self.url, self._revision)
+            self._prefetch_data = prefetch_git(self.url, self._logger, self._revision)
         return self._prefetch_data
 
 
@@ -107,18 +108,21 @@ class UrlSource:
 
 class PathSource:
     def __init__(self, path: str) -> None:
-        self.path = path
+        self.path = Path(path)
 
     @property
-    def _normalized_path(self) -> str:
-        if os.path.isabs(self.path):
-            return self.path
-        else:
-            head, tail = os.path.split(self.path)
-            if head:
-                return self.path
-            else:
-                return os.path.join(self.path, ".")
+    def _normalized_path(self) -> Path:
+        return self.path.resolve()
+
+    def sha256(self) -> str:
+        return self._normalized_path.sha256_sum()
 
     def nix_expression(self) -> str:
-        return self._normalized_path
+        return " ".join(
+            [
+                "builtins.fetchurl {",
+                f'url = "file://{self._normalized_path}";',
+                f'sha256 = "{self.sha256()}";',
+                "}",
+            ]
+        )
