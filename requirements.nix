@@ -1344,12 +1344,12 @@ let
     };
 
     "requests" = python.mkDerivation {
-      name = "requests-2.23.0";
+      name = "requests-2.24.0";
       src = pkgs.fetchurl {
         url =
-          "https://files.pythonhosted.org/packages/f5/4f/280162d4bd4d8aad241a21aecff7a6e46891b905a4341e7ab549ebaf7915/requests-2.23.0.tar.gz";
+          "https://files.pythonhosted.org/packages/da/67/672b422d9daf07365259958912ba533a0ecab839d4084c487a5fe9a5405f/requests-2.24.0.tar.gz";
         sha256 =
-          "b3f43d496c6daba4493e7c431722aeb7dbc6288f52a6e04e7b6023b0247817e6";
+          "b3559a131db72c33ee969480840fff4bb6dd111de7dd27c8ee1f820f4f00231b";
       };
       doCheck = commonDoCheck;
       format = "setuptools";

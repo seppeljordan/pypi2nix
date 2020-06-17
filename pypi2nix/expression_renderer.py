@@ -9,6 +9,7 @@ from typing import List
 
 import jinja2
 
+from pypi2nix.code_formatter import CodeFormatter
 from pypi2nix.logger import Logger
 from pypi2nix.nix_language import escape_string
 from pypi2nix.overrides import Overrides
@@ -38,6 +39,7 @@ class FlakeRenderer(ExpressionRenderer):
         target_platform: TargetPlatform,
         logger: Logger,
         extra_build_inputs: List[str],
+        code_formatter: CodeFormatter,
         overrides: Iterable[Overrides] = [],
     ) -> None:
         self._target_path = target_path
@@ -45,6 +47,7 @@ class FlakeRenderer(ExpressionRenderer):
         self._target_platform = target_platform
         self._overrides = overrides
         self._logger = logger
+        self._code_formatter = code_formatter
 
     def render_expression(
         self, packages_metadata: Iterable[Wheel], sources: Sources,
@@ -84,6 +87,7 @@ class FlakeRenderer(ExpressionRenderer):
         flake_template = TEMPLATES.get_template("flake.nix.j2")
         flake_content: str = flake_template.render(**context)
         self._target_path.write_text(flake_content)
+        self._code_formatter.format_file(self._target_path)
         self._render_overrides_file()
 
     def _render_overrides_file(self) -> None:
@@ -93,6 +97,7 @@ class FlakeRenderer(ExpressionRenderer):
         if not overrides_path.exists():
             overrides = TEMPLATES.get_template("overrides.nix.j2").render()
             overrides_path.write_text(overrides)
+            self._code_formatter.format_file(overrides_path)
 
 
 class RequirementsRenderer(ExpressionRenderer):
@@ -105,6 +110,7 @@ class RequirementsRenderer(ExpressionRenderer):
         logger: Logger,
         target_platform: TargetPlatform,
         requirements_frozen: str,
+        code_formatter: CodeFormatter,
         common_overrides: Iterable[Overrides] = [],
     ):
         self._requirements_name = requirements_name
@@ -118,6 +124,7 @@ class RequirementsRenderer(ExpressionRenderer):
             self._target_directory, f"{requirements_name}_frozen.txt"
         )
         self._requirements_frozen = requirements_frozen
+        self._code_formatter = code_formatter
 
     def render_expression(
         self, packages_metadata: Iterable[Wheel], sources: Sources,
@@ -225,3 +232,5 @@ class RequirementsRenderer(ExpressionRenderer):
             f.write(default.strip())
         with open(self._frozen_file, "w+") as f:
             f.write(self._requirements_frozen)
+        self._code_formatter.format_file(Path(default_file))
+        self._code_formatter.format_file(Path(overrides_file))

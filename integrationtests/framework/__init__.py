@@ -7,6 +7,7 @@ import sys
 from typing import Dict
 from typing import List
 from typing import Optional
+from typing import Set
 from unittest import TestCase
 
 import yaml
@@ -19,9 +20,13 @@ from pypi2nix.logger import StreamLogger
 from pypi2nix.memoize import memoize
 from pypi2nix.nix import EvaluationFailed
 from pypi2nix.nix import Nix
+from pypi2nix.path import Path
 from pypi2nix.requirement_parser import RequirementParser
 
-HERE = os.path.dirname(__file__)
+from .format_tester import FormatTester
+
+HERE = Path(os.path.dirname(__file__))
+ROOT = HERE / ".." / ".."
 
 
 class IntegrationTest(TestCase):
@@ -79,13 +84,13 @@ class IntegrationTest(TestCase):
         self.check_requirements_file_content()
         self.run_expression_tests()
         self.run_dependency_graph_tests()
+        self.check_output_formatting()
 
     def build_pypi2nix(self) -> None:
         print("Build pypi2nix executable")
         try:
             self.nix.build(
-                os.path.join(os.path.dirname(HERE), "default.nix"),
-                out_link=os.path.join(HERE, "pypi2nix"),
+                str(ROOT / "default.nix"), out_link=str(HERE / ".." / "pypi2nix")
             )
         except EvaluationFailed:
             self.fail("Could not build pypi2nix executable")
@@ -115,7 +120,7 @@ class IntegrationTest(TestCase):
 
     def build_nix_expression_command(self) -> List[str]:
         command = [
-            os.path.join(HERE, "pypi2nix", "bin", "pypi2nix"),
+            str(HERE / ".." / "pypi2nix" / "bin" / "pypi2nix"),
             "-vvv",
             "-V",
             self.python_version,
@@ -164,6 +169,12 @@ class IntegrationTest(TestCase):
     def run_dependency_graph_tests(self) -> None:
         dependency_graph = self._read_dependency_graph()
         self.check_dependency_graph(dependency_graph, self.requirement_parser)
+
+    def check_output_formatting(self) -> None:
+        tester = FormatTester(self.logger)
+        for output_file in self._output_files():
+            if not tester.has_correct_format(output_file):
+                self.fail(f"{output_file} has bad format")
 
     def build_interpreter_from_generated_expression(self) -> None:
         print("Build python interpreter from generated expression")
@@ -303,7 +314,7 @@ class IntegrationTest(TestCase):
         return os.path.join(self.example_directory(), "flake.nix")
 
     def example_directory(self) -> str:
-        return os.path.join(HERE, self.name_of_testcase)
+        return str(HERE / ".." / self.name_of_testcase)
 
     def requirements_file_check(self, _: str) -> None:
         pass
@@ -356,6 +367,12 @@ class IntegrationTest(TestCase):
                 self.dependency_graph, f,
             )
         return path
+
+    def _output_files(self) -> Set[Path]:
+        return {
+            Path(self.example_directory()) / "requirements.nix",
+            Path(self.flake_path()),
+        }
 
 
 @attrs

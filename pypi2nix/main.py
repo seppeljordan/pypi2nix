@@ -3,6 +3,8 @@ import os.path
 import sys
 from typing import List
 
+from pypi2nix.code_formatter import CodeFormatter
+from pypi2nix.code_formatter import Nixfmt
 from pypi2nix.configuration import ApplicationConfiguration
 from pypi2nix.dependency_graph import DependencyGraph
 from pypi2nix.expression_renderer import ExpressionRenderer
@@ -107,6 +109,7 @@ class Pypi2nix:
                 common_overrides=self.configuration.overrides,
                 target_platform=self.target_platform(),
                 requirements_frozen=requirements_frozen,
+                code_formatter=self.code_formatter(),
             )
         )
         renderers.append(
@@ -116,6 +119,7 @@ class Pypi2nix:
                 logger=self.logger(),
                 overrides=self.configuration.overrides,
                 extra_build_inputs=self.extra_build_inputs(),
+                code_formatter=self.code_formatter(),
             )
         )
         for renderer in renderers:
@@ -132,6 +136,10 @@ class Pypi2nix:
             ) as output_file:
                 output_file.write(dependency_graph.serialize())
         self.print_user_information()
+
+    @memoize
+    def code_formatter(self) -> CodeFormatter:
+        return Nixfmt(logger=self.logger())
 
     @memoize
     def extra_build_inputs(self) -> List[str]:

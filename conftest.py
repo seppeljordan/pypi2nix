@@ -10,6 +10,8 @@ from typing import List
 import pytest
 
 from pypi2nix.archive import Archive
+from pypi2nix.code_formatter import CodeFormatter
+from pypi2nix.code_formatter import Nixfmt
 from pypi2nix.dependency_graph import DependencyGraph
 from pypi2nix.logger import Logger
 from pypi2nix.logger import StreamLogger
@@ -319,3 +321,8 @@ def build_wheels(
         )
 
     return wrapper
+
+
+@pytest.fixture
+def code_formatter(logger: Logger) -> CodeFormatter:
+    return Nixfmt(logger=logger)

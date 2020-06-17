@@ -2,6 +2,7 @@ from typing import Any
 
 import pytest
 
+from pypi2nix.code_formatter import CodeFormatter
 from pypi2nix.expression_renderer import FlakeRenderer
 from pypi2nix.logger import Logger
 from pypi2nix.nix import Nix
@@ -67,11 +68,15 @@ def result_path(tmpdir_factory: Any) -> Path:
 
 @pytest.fixture
 def flake_renderer(
-    flake_path: Path, current_platform: TargetPlatform, logger: Logger
+    flake_path: Path,
+    current_platform: TargetPlatform,
+    logger: Logger,
+    code_formatter: CodeFormatter,
 ) -> FlakeRenderer:
     return FlakeRenderer(
         target_path=flake_path,
         target_platform=current_platform,
         logger=logger,
         extra_build_inputs=[],
+        code_formatter=code_formatter,
     )
