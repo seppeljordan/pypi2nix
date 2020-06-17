@@ -58,6 +58,9 @@ class Path:
     def sha256_sum(self) -> str:
         return to_base32(sha256(self.read_binary()).hexdigest())
 
+    def directory_name(self) -> Path:
+        return Path(os.path.dirname(self._path))
+
     def __truediv__(self, other: Union[str, Path]) -> Path:
         if isinstance(other, str):
             return Path(self._path / other)

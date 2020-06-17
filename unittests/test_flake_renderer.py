@@ -70,5 +70,8 @@ def flake_renderer(
     flake_path: Path, current_platform: TargetPlatform, logger: Logger
 ) -> FlakeRenderer:
     return FlakeRenderer(
-        target_path=flake_path, target_platform=current_platform, logger=logger
+        target_path=flake_path,
+        target_platform=current_platform,
+        logger=logger,
+        extra_build_inputs=[],
     )

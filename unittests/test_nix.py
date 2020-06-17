@@ -1,10 +1,12 @@
 import os.path
+import subprocess
 
 import pytest
 
 from pypi2nix.nix import EvaluationFailed
 from pypi2nix.nix import ExecutableNotFound
 from pypi2nix.nix import Nix
+from pypi2nix.path import Path
 
 from .switches import nix
 
@@ -104,3 +106,22 @@ def test_build_expression_respects_boolean_arguments(nix_instance):
         ]
     )
     nix_instance.build_expression(expression, arguments={"argument": True})
+
+
+@nix
+def test_can_build_a_flake(tmpdir, nix: Nix):
+    build_dir: Path = Path(str(tmpdir))
+    out_link_path = build_dir / "result"
+    flake_path = build_dir / "flake.nix"
+    flake_path.write_text(
+        """{
+  description = "A flake for building Hello World";
+  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-20.03;
+  outputs = { self, nixpkgs }: {
+    defaultPackage.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.hello;
+  };
+}"""
+    )
+    nix.build_flake(flake_path / "..", out_link=out_link_path)
+    completed_process = subprocess.run(str(out_link_path / "bin" / "hello"))
+    assert completed_process.returncode == 0

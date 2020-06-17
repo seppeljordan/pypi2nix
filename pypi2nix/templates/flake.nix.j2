@@ -25,7 +25,8 @@
             generatedPackages = self: {
               {% for package in packages %}
               "{{ package.name }}" = python.pkgs.buildPythonPackage {
-                name = "{{ package.name }}-{{ package.version }}";
+                pname = "{{ package.name }}";
+                version = "{{ package.version }}";
                 src = {{ package.fetch_expression }};
                 doCheck = false;
                 format = "{{ package.format }}";
@@ -48,35 +49,43 @@
             overrides = with pkgs.lib;
               fold composeExtensions (self: super: {}) [
                 {{ common_overrides }}
+                (import "${self}/requirements_override.nix" { inherit pkgs python;})
               ];
-            pythonPackages = with pkgs.lib;
-              fix (extends overrides generatedPackages);
-            interpreterWithPackages = selectPkgsFn: python.pkgs.buildPythonPackage {
-              name = "python3-interpreter";
-              buildInputs = [ pkgs.makeWrapper ] ++ (selectPkgsFn pythonPackages);
-              buildCommand = ''
-                mkdir -p $out/bin
-                ln -s ${python.interpreter} \
-                    $out/bin/${python.executable}
-                for dep in ${builtins.concatStringsSep " "
-                    (selectPkgsFn pythonPackages)}; do
-                  if [ -d "$dep/bin" ]; then
-                    for prog in "$dep/bin/"*; do
-                      if [ -x "$prog" ] && [ -f "$prog" ]; then
-                        ln -s $prog $out/bin/`basename $prog`
+            pythonPackages = with pkgs.lib; with builtins;
+              # We need to remove the __unfix__ attribute since it
+              # does not evaluate to a derivation and causes problems
+              # when we want to select all packages from the set.
+              removeAttrs
+                (fix' (extends overrides generatedPackages))
+                ["__unfix__"];
+            interpreterWithPackages = selectPkgsFn:
+              let
+                selectedPackages = selectPkgsFn pythonPackages;
+              in
+                python.pkgs.buildPythonPackage {
+                  name = "python3-interpreter";
+                  buildInputs = [ pkgs.makeWrapper ] ++ selectedPackages;
+                  buildCommand = ''
+                    mkdir -p $out/bin
+                    ln -s ${python.interpreter} $out/bin/${python.executable}
+                    for dep in ${builtins.concatStringsSep " " selectedPackages}; do
+                      if [ -d "$dep/bin" ]; then
+                        for prog in "$dep/bin/"*; do
+                          if [ -x "$prog" ] && [ -f "$prog" ]; then
+                            ln -s $prog $out/bin/`basename $prog`
+                          fi
+                        done
                       fi
                     done
-                  fi
-                done
-                for prog in "$out/bin/"*; do
-                  wrapProgram "$prog" --prefix PYTHONPATH : "$PYTHONPATH"
-                done
-                pushd $out/bin
-                ln -s ${python.executable} python
-                ln -s ${python.executable} python3
-                popd
-              '';
-              passthru.interpreter = pythonPackages.python;
+                    for prog in "$out/bin/"*; do
+                      wrapProgram "$prog" --prefix PYTHONPATH : "$PYTHONPATH"
+                    done
+                    pushd $out/bin
+                    ln -s ${python.executable} python
+                    ln -s ${python.executable} python3
+                    popd
+                    '';
+                  passthru.interpreter = pythonPackages.python;
             };
             interpreter = interpreterWithPackages builtins.attrValues;
           in

@@ -37,10 +37,11 @@ class FlakeRenderer(ExpressionRenderer):
         target_path: Path,
         target_platform: TargetPlatform,
         logger: Logger,
+        extra_build_inputs: List[str],
         overrides: Iterable[Overrides] = [],
     ) -> None:
         self._target_path = target_path
-        self._extra_build_inputs: List[str] = []
+        self._extra_build_inputs = extra_build_inputs
         self._target_platform = target_platform
         self._overrides = overrides
         self._logger = logger
@@ -59,7 +60,7 @@ class FlakeRenderer(ExpressionRenderer):
                     "fetch_expression": sources[wheel.name].nix_expression(),
                     "format": wheel.package_format,
                     "build_dependencies": [
-                        dependency.name
+                        dependency.name()
                         for dependency in wheel.build_dependencies(
                             self._target_platform
                         )
@@ -71,7 +72,7 @@ class FlakeRenderer(ExpressionRenderer):
                         ]
                     ),
                     "runtime_dependencies": [
-                        dependency.name
+                        dependency.name()
                         for dependency in wheel.runtime_dependencies(
                             self._target_platform
                         )
@@ -83,6 +84,15 @@ class FlakeRenderer(ExpressionRenderer):
         flake_template = TEMPLATES.get_template("flake.nix.j2")
         flake_content: str = flake_template.render(**context)
         self._target_path.write_text(flake_content)
+        self._render_overrides_file()
+
+    def _render_overrides_file(self) -> None:
+        overrides_path = (
+            self._target_path.directory_name() / "requirements_override.nix"
+        )
+        if not overrides_path.exists():
+            overrides = TEMPLATES.get_template("overrides.nix.j2").render()
+            overrides_path.write_text(overrides)
 
 
 class RequirementsRenderer(ExpressionRenderer):
@@ -94,6 +104,7 @@ class RequirementsRenderer(ExpressionRenderer):
         target_directory: str,
         logger: Logger,
         target_platform: TargetPlatform,
+        requirements_frozen: str,
         common_overrides: Iterable[Overrides] = [],
     ):
         self._requirements_name = requirements_name
@@ -106,6 +117,7 @@ class RequirementsRenderer(ExpressionRenderer):
         self._frozen_file = os.path.join(
             self._target_directory, f"{requirements_name}_frozen.txt"
         )
+        self._requirements_frozen = requirements_frozen
 
     def render_expression(
         self, packages_metadata: Iterable[Wheel], sources: Sources,
@@ -211,7 +223,5 @@ class RequirementsRenderer(ExpressionRenderer):
 
         with open(default_file, "w+") as f:
             f.write(default.strip())
-
-    def render_requirements_frozen(self, requirements_frozen: str) -> None:
         with open(self._frozen_file, "w+") as f:
-            f.write(requirements_frozen)
+            f.write(self._requirements_frozen)

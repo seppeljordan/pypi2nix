@@ -49,7 +49,14 @@ class CodeFormatter:
             self._logger.info("Formatting nix files")
             integration_test_nix_files = find_nix_files_in_integration_tests()
             subprocess.run(
-                ["nixfmt", "default.nix", "pypi2nix/pip/bootstrap.nix"]
+                [
+                    "nixfmt",
+                    "default.nix",
+                    "pypi2nix/pip/bootstrap.nix",
+                    "flake.nix",
+                    "requirements.nix",
+                    "requirements_override.nix",
+                ]
                 + integration_test_nix_files,
                 check=True,
             )

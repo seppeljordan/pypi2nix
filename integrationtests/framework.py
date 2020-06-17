@@ -150,9 +150,16 @@ class IntegrationTest(TestCase):
 
     def run_expression_tests(self) -> None:
         self.build_interpreter_from_generated_expression()
+        self.build_flake()
         self.build_additional_attributes()
         self.run_interpreter_with_test_code()
         self.run_executable_tests()
+
+    def build_flake(self) -> None:
+        try:
+            self.nix.build(self.flake_path(),)
+        except EvaluationFailed:
+            self.fail("Could not build flake resulting from specified packages")
 
     def run_dependency_graph_tests(self) -> None:
         dependency_graph = self._read_dependency_graph()
@@ -291,6 +298,9 @@ class IntegrationTest(TestCase):
 
     def requirements_file_path(self) -> str:
         return os.path.join(self.example_directory(), "requirements.txt")
+
+    def flake_path(self) -> str:
+        return os.path.join(self.example_directory(), "flake.nix")
 
     def example_directory(self) -> str:
         return os.path.join(HERE, self.name_of_testcase)

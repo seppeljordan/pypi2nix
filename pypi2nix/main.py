@@ -5,6 +5,8 @@ from typing import List
 
 from pypi2nix.configuration import ApplicationConfiguration
 from pypi2nix.dependency_graph import DependencyGraph
+from pypi2nix.expression_renderer import ExpressionRenderer
+from pypi2nix.expression_renderer import FlakeRenderer
 from pypi2nix.expression_renderer import RequirementsRenderer
 from pypi2nix.external_dependencies import ExternalDependency
 from pypi2nix.external_dependency_collector import ExternalDependencyCollector
@@ -14,6 +16,7 @@ from pypi2nix.logger import StreamLogger
 from pypi2nix.memoize import memoize
 from pypi2nix.metadata_fetcher import MetadataFetcher
 from pypi2nix.nix import Nix
+from pypi2nix.path import Path
 from pypi2nix.pip import NixPip
 from pypi2nix.pypi import Pypi
 from pypi2nix.requirement_parser import RequirementParser
@@ -93,23 +96,33 @@ class Pypi2nix:
         )
         self.logger().info("Generating Nix expressions ...")
 
-        renderer = RequirementsRenderer(
-            requirements_name=requirements_name,
-            extra_build_inputs=(
-                self.configuration.extra_build_inputs
-                if self.configuration.emit_extra_build_inputs
-                else []
-            ),
-            python_version=self.configuration.python_version,
-            target_directory=self.configuration.target_directory,
-            logger=self.logger(),
-            common_overrides=self.configuration.overrides,
-            target_platform=self.target_platform(),
+        renderers: List[ExpressionRenderer] = []
+        renderers.append(
+            RequirementsRenderer(
+                requirements_name=requirements_name,
+                extra_build_inputs=self.extra_build_inputs(),
+                python_version=self.configuration.python_version,
+                target_directory=self.configuration.target_directory,
+                logger=self.logger(),
+                common_overrides=self.configuration.overrides,
+                target_platform=self.target_platform(),
+                requirements_frozen=requirements_frozen,
+            )
         )
-        renderer.render_expression(
-            packages_metadata=packages_metadata, sources=sources,
+        renderers.append(
+            FlakeRenderer(
+                target_path=Path(self.configuration.target_directory) / "flake.nix",
+                target_platform=self.target_platform(),
+                logger=self.logger(),
+                overrides=self.configuration.overrides,
+                extra_build_inputs=self.extra_build_inputs(),
+            )
         )
-        renderer.render_requirements_frozen(requirements_frozen=requirements_frozen,)
+        for renderer in renderers:
+            renderer.render_expression(
+                packages_metadata=packages_metadata, sources=sources,
+            )
+
         if self.configuration.dependency_graph_output_location:
             dependency_graph = DependencyGraph()
             for wheel in packages_metadata:
@@ -119,6 +132,14 @@ class Pypi2nix:
             ) as output_file:
                 output_file.write(dependency_graph.serialize())
         self.print_user_information()
+
+    @memoize
+    def extra_build_inputs(self) -> List[str]:
+        return (
+            self.configuration.extra_build_inputs
+            if self.configuration.emit_extra_build_inputs
+            else []
+        )
 
     def print_user_information(self) -> None:
         self.logger().info(
