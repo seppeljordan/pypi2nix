@@ -24,7 +24,7 @@ class Nixfmt(CodeFormatter):
 
     def _is_nixfmt_installed(self) -> bool:
         try:
-            cmd(["nixfmt", "-h"], self._logger)
+            cmd(["nixfmt", "--help"], self._logger)
         except FileNotFoundError:
             return False
         else:
