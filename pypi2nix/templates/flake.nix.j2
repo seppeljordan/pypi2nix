@@ -30,10 +30,11 @@
                 src = {{ package.fetch_expression }};
                 doCheck = false;
                 format = "{{ package.format }}";
-                buildInputs = commonBuildInputs ++ (with self;
+                nativeBuildInputs = with self;
                   [
                     {% for input in package.build_dependencies %} {{ input }} {% endfor %}
-                  ]);
+                  ];
+                buildInputs = commonBuildInputs;
                 propagatedBuildInputs = (with self;
                   [
                     {% for input in package.runtime_dependencies %} {{ input }} {% endfor %}

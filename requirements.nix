@@ -1,3 +1,4 @@
+# -*- mode: nix -*-
 # generated using pypi2nix tool (version: 2.0.4)
 # See more at: https://github.com/nix-community/pypi2nix
 #
@@ -60,11 +61,6 @@ let
       __old = pythonPackages;
       inherit interpreter;
       inherit interpreterWithPackages;
-      mkDerivation = args:
-        pythonPackages.buildPythonPackage (args // {
-          nativeBuildInputs = (args.nativeBuildInputs or [ ])
-            ++ args.buildInputs;
-        });
       packages = pkgs;
       overrideDerivation = drv: f:
         pythonPackages.buildPythonPackage
@@ -75,7 +71,57 @@ let
   python = withPackages { };
 
   generated = self: {
-    "alabaster" = python.mkDerivation {
+    "aiohttp" = pythonPackages.buildPythonPackage {
+      name = "aiohttp-3.6.2";
+      src = pkgs.fetchurl {
+        url =
+          "https://files.pythonhosted.org/packages/00/94/f9fa18e8d7124d7850a5715a0b9c0584f7b9375d331d35e157cee50f27cc/aiohttp-3.6.2.tar.gz";
+        sha256 =
+          "259ab809ff0727d0e834ac5e8a283dc5e3e0ecc30c4d80b3cd17a4139ce1f326";
+      };
+      doCheck = commonDoCheck;
+      format = "setuptools";
+      nativeBuildInputs = [
+
+      ];
+      buildInputs = commonBuildInputs;
+      propagatedBuildInputs = [
+        self."async-timeout"
+        self."attrs"
+        self."chardet"
+        self."multidict"
+        self."yarl"
+      ];
+      meta = with pkgs.stdenv.lib; {
+        homepage = "https://github.com/aio-libs/aiohttp";
+        license = licenses.asl20;
+        description = "Async http client/server framework (asyncio)";
+      };
+    };
+
+    "aiohttp-cors" = pythonPackages.buildPythonPackage {
+      name = "aiohttp-cors-0.7.0";
+      src = pkgs.fetchurl {
+        url =
+          "https://files.pythonhosted.org/packages/44/9e/6cdce7c3f346d8fd487adf68761728ad8cd5fbc296a7b07b92518350d31f/aiohttp-cors-0.7.0.tar.gz";
+        sha256 =
+          "4d39c6d7100fd9764ed1caf8cebf0eb01bf5e3f24e2e073fda6234bc48b19f5d";
+      };
+      doCheck = commonDoCheck;
+      format = "setuptools";
+      nativeBuildInputs = [
+
+      ];
+      buildInputs = commonBuildInputs;
+      propagatedBuildInputs = [ self."aiohttp" ];
+      meta = with pkgs.stdenv.lib; {
+        homepage = "https://github.com/aio-libs/aiohttp-cors";
+        license = licenses.asl20;
+        description = "CORS support for aiohttp";
+      };
+    };
+
+    "alabaster" = pythonPackages.buildPythonPackage {
       name = "alabaster-0.7.12";
       src = pkgs.fetchurl {
         url =
@@ -85,9 +131,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://alabaster.readthedocs.io";
@@ -96,7 +143,7 @@ let
       };
     };
 
-    "appdirs" = python.mkDerivation {
+    "appdirs" = pythonPackages.buildPythonPackage {
       name = "appdirs-1.4.4";
       src = pkgs.fetchurl {
         url =
@@ -106,9 +153,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://github.com/ActiveState/appdirs";
@@ -118,7 +166,29 @@ let
       };
     };
 
-    "attrs" = python.mkDerivation {
+    "async-timeout" = pythonPackages.buildPythonPackage {
+      name = "async-timeout-3.0.1";
+      src = pkgs.fetchurl {
+        url =
+          "https://files.pythonhosted.org/packages/a1/78/aae1545aba6e87e23ecab8d212b58bb70e72164b67eb090b81bb17ad38e3/async-timeout-3.0.1.tar.gz";
+        sha256 =
+          "0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f";
+      };
+      doCheck = commonDoCheck;
+      format = "setuptools";
+      nativeBuildInputs = [
+
+      ];
+      buildInputs = commonBuildInputs;
+      propagatedBuildInputs = [ ];
+      meta = with pkgs.stdenv.lib; {
+        homepage = "https://github.com/aio-libs/async_timeout/";
+        license = licenses.asl20;
+        description = "Timeout context manager for asyncio programs";
+      };
+    };
+
+    "attrs" = pythonPackages.buildPythonPackage {
       name = "attrs-19.3.0";
       src = pkgs.fetchurl {
         url =
@@ -128,7 +198,8 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs ++ [ self."setuptools" self."wheel" ];
+      nativeBuildInputs = [ self."setuptools" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://www.attrs.org/";
@@ -137,7 +208,7 @@ let
       };
     };
 
-    "babel" = python.mkDerivation {
+    "babel" = pythonPackages.buildPythonPackage {
       name = "babel-2.8.0";
       src = pkgs.fetchurl {
         url =
@@ -147,9 +218,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."pytz" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://babel.pocoo.org/";
@@ -158,7 +230,7 @@ let
       };
     };
 
-    "black" = python.mkDerivation {
+    "black" = pythonPackages.buildPythonPackage {
       name = "black-19.10b0";
       src = pkgs.fetchurl {
         url =
@@ -168,8 +240,9 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs
-        ++ [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      nativeBuildInputs =
+        [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [
         self."appdirs"
         self."attrs"
@@ -186,7 +259,7 @@ let
       };
     };
 
-    "bleach" = python.mkDerivation {
+    "bleach" = pythonPackages.buildPythonPackage {
       name = "bleach-3.1.5";
       src = pkgs.fetchurl {
         url =
@@ -196,9 +269,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs =
         [ self."packaging" self."six" self."webencodings" ];
       meta = with pkgs.stdenv.lib; {
@@ -208,7 +282,7 @@ let
       };
     };
 
-    "bumpv" = python.mkDerivation {
+    "bumpv" = pythonPackages.buildPythonPackage {
       name = "bumpv-0.3.0";
       src = pkgs.fetchurl {
         url =
@@ -218,9 +292,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."click" self."pyaml" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/kylie-a/bumpv";
@@ -229,7 +304,7 @@ let
       };
     };
 
-    "certifi" = python.mkDerivation {
+    "certifi" = pythonPackages.buildPythonPackage {
       name = "certifi-2020.4.5.2";
       src = pkgs.fetchurl {
         url =
@@ -239,9 +314,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://certifiio.readthedocs.io/en/latest/";
@@ -250,7 +326,7 @@ let
       };
     };
 
-    "cffi" = python.mkDerivation {
+    "cffi" = pythonPackages.buildPythonPackage {
       name = "cffi-1.14.0";
       src = pkgs.fetchurl {
         url =
@@ -260,9 +336,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."pycparser" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://cffi.readthedocs.org";
@@ -271,7 +348,7 @@ let
       };
     };
 
-    "chardet" = python.mkDerivation {
+    "chardet" = pythonPackages.buildPythonPackage {
       name = "chardet-3.0.4";
       src = pkgs.fetchurl {
         url =
@@ -281,9 +358,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/chardet/chardet";
@@ -292,7 +370,7 @@ let
       };
     };
 
-    "click" = python.mkDerivation {
+    "click" = pythonPackages.buildPythonPackage {
       name = "click-7.0";
       src = pkgs.fetchurl {
         url =
@@ -302,9 +380,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://palletsprojects.com/p/click/";
@@ -313,7 +392,7 @@ let
       };
     };
 
-    "coverage" = python.mkDerivation {
+    "coverage" = pythonPackages.buildPythonPackage {
       name = "coverage-5.1";
       src = pkgs.fetchurl {
         url =
@@ -323,9 +402,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/nedbat/coveragepy";
@@ -334,7 +414,7 @@ let
       };
     };
 
-    "cryptography" = python.mkDerivation {
+    "cryptography" = pythonPackages.buildPythonPackage {
       name = "cryptography-2.9.2";
       src = pkgs.fetchurl {
         url =
@@ -344,8 +424,8 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs
-        ++ [ self."cffi" self."setuptools" self."wheel" ];
+      nativeBuildInputs = [ self."cffi" self."setuptools" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."cffi" self."six" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/pyca/cryptography";
@@ -355,7 +435,7 @@ let
       };
     };
 
-    "docutils" = python.mkDerivation {
+    "docutils" = pythonPackages.buildPythonPackage {
       name = "docutils-0.16";
       src = pkgs.fetchurl {
         url =
@@ -365,9 +445,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://docutils.sourceforge.net/";
@@ -376,7 +457,7 @@ let
       };
     };
 
-    "effect" = python.mkDerivation {
+    "effect" = pythonPackages.buildPythonPackage {
       name = "effect-1.1.0";
       src = pkgs.fetchurl {
         url =
@@ -386,9 +467,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."attrs" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://github.com/python-effect/effect/";
@@ -397,7 +479,7 @@ let
       };
     };
 
-    "fancycompleter" = python.mkDerivation {
+    "fancycompleter" = pythonPackages.buildPythonPackage {
       name = "fancycompleter-0.9.1";
       src = pkgs.fetchurl {
         url =
@@ -407,9 +489,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."pyrepl" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/pdbpp/fancycompleter";
@@ -418,7 +501,7 @@ let
       };
     };
 
-    "flake8" = python.mkDerivation {
+    "flake8" = pythonPackages.buildPythonPackage {
       name = "flake8-3.8.3";
       src = pkgs.fetchurl {
         url =
@@ -428,9 +511,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [
         self."importlib-metadata"
         self."mccabe"
@@ -444,7 +528,7 @@ let
       };
     };
 
-    "flake8-debugger" = python.mkDerivation {
+    "flake8-debugger" = pythonPackages.buildPythonPackage {
       name = "flake8-debugger-3.2.1";
       src = pkgs.fetchurl {
         url =
@@ -454,9 +538,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."flake8" self."pycodestyle" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/jbkahn/flake8-debugger";
@@ -465,7 +550,7 @@ let
       };
     };
 
-    "flake8-unused-arguments" = python.mkDerivation {
+    "flake8-unused-arguments" = pythonPackages.buildPythonPackage {
       name = "flake8-unused-arguments-0.0.4";
       src = pkgs.fetchurl {
         url =
@@ -475,9 +560,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."flake8" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/nhoad/flake8-unused-arguments";
@@ -486,7 +572,7 @@ let
       };
     };
 
-    "flit-core" = python.mkDerivation {
+    "flit-core" = pythonPackages.buildPythonPackage {
       name = "flit-core-2.2.0";
       src = pkgs.fetchurl {
         url =
@@ -496,7 +582,8 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs ++ [ self."intreehooks" ];
+      nativeBuildInputs = [ self."intreehooks" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."pytoml" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/takluyver/flit";
@@ -506,7 +593,7 @@ let
       };
     };
 
-    "hypothesis" = python.mkDerivation {
+    "hypothesis" = pythonPackages.buildPythonPackage {
       name = "hypothesis-5.16.1";
       src = pkgs.fetchurl {
         url =
@@ -516,9 +603,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."attrs" self."sortedcontainers" ];
       meta = with pkgs.stdenv.lib; {
         homepage =
@@ -528,7 +616,7 @@ let
       };
     };
 
-    "idna" = python.mkDerivation {
+    "idna" = pythonPackages.buildPythonPackage {
       name = "idna-2.9";
       src = pkgs.fetchurl {
         url =
@@ -538,9 +626,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/kjd/idna";
@@ -549,7 +638,7 @@ let
       };
     };
 
-    "imagesize" = python.mkDerivation {
+    "imagesize" = pythonPackages.buildPythonPackage {
       name = "imagesize-1.2.0";
       src = pkgs.fetchurl {
         url =
@@ -559,9 +648,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/shibukawa/imagesize_py";
@@ -570,7 +660,7 @@ let
       };
     };
 
-    "importlib-metadata" = python.mkDerivation {
+    "importlib-metadata" = pythonPackages.buildPythonPackage {
       name = "importlib-metadata-1.6.1";
       src = pkgs.fetchurl {
         url =
@@ -580,8 +670,9 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs
-        ++ [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      nativeBuildInputs =
+        [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."zipp" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://importlib-metadata.readthedocs.io/";
@@ -590,7 +681,7 @@ let
       };
     };
 
-    "intreehooks" = python.mkDerivation {
+    "intreehooks" = pythonPackages.buildPythonPackage {
       name = "intreehooks-1.0";
       src = pkgs.fetchurl {
         url =
@@ -600,9 +691,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."pytoml" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/takluyver/intreehooks";
@@ -611,7 +703,7 @@ let
       };
     };
 
-    "isort" = python.mkDerivation {
+    "isort" = pythonPackages.buildPythonPackage {
       name = "isort-4.3.21";
       src = pkgs.fetchurl {
         url =
@@ -621,9 +713,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/timothycrosley/isort";
@@ -632,7 +725,7 @@ let
       };
     };
 
-    "jeepney" = python.mkDerivation {
+    "jeepney" = pythonPackages.buildPythonPackage {
       name = "jeepney-0.4.3";
       src = pkgs.fetchurl {
         url =
@@ -642,7 +735,8 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs ++ [ self."flit-core" ];
+      nativeBuildInputs = [ self."flit-core" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://gitlab.com/takluyver/jeepney";
@@ -651,7 +745,7 @@ let
       };
     };
 
-    "jinja2" = python.mkDerivation {
+    "jinja2" = pythonPackages.buildPythonPackage {
       name = "jinja2-2.11.2";
       src = pkgs.fetchurl {
         url =
@@ -661,9 +755,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."markupsafe" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://palletsprojects.com/p/jinja/";
@@ -672,7 +767,7 @@ let
       };
     };
 
-    "jsonschema" = python.mkDerivation {
+    "jsonschema" = pythonPackages.buildPythonPackage {
       name = "jsonschema-3.2.0";
       src = pkgs.fetchurl {
         url =
@@ -682,8 +777,9 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs
-        ++ [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      nativeBuildInputs =
+        [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [
         self."attrs"
         self."importlib-metadata"
@@ -698,7 +794,7 @@ let
       };
     };
 
-    "keyring" = python.mkDerivation {
+    "keyring" = pythonPackages.buildPythonPackage {
       name = "keyring-21.2.1";
       src = pkgs.fetchurl {
         url =
@@ -708,8 +804,9 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs
-        ++ [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      nativeBuildInputs =
+        [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs =
         [ self."importlib-metadata" self."jeepney" self."secretstorage" ];
       meta = with pkgs.stdenv.lib; {
@@ -719,7 +816,7 @@ let
       };
     };
 
-    "markupsafe" = python.mkDerivation {
+    "markupsafe" = pythonPackages.buildPythonPackage {
       name = "markupsafe-1.1.1";
       src = pkgs.fetchurl {
         url =
@@ -729,9 +826,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://palletsprojects.com/p/markupsafe/";
@@ -740,7 +838,7 @@ let
       };
     };
 
-    "mccabe" = python.mkDerivation {
+    "mccabe" = pythonPackages.buildPythonPackage {
       name = "mccabe-0.6.1";
       src = pkgs.fetchurl {
         url =
@@ -750,9 +848,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/pycqa/mccabe";
@@ -761,7 +860,7 @@ let
       };
     };
 
-    "more-itertools" = python.mkDerivation {
+    "more-itertools" = pythonPackages.buildPythonPackage {
       name = "more-itertools-8.4.0";
       src = pkgs.fetchurl {
         url =
@@ -771,9 +870,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/more-itertools/more-itertools";
@@ -783,7 +883,27 @@ let
       };
     };
 
-    "mypy" = python.mkDerivation {
+    "multidict" = pythonPackages.buildPythonPackage {
+      name = "multidict-4.7.6";
+      src = pkgs.fetchurl {
+        url =
+          "https://files.pythonhosted.org/packages/65/d4/fabdcc5ee4451c8a8e177e27ddfd131a53a82ecc5a3b68468b7e9f8d70b4/multidict-4.7.6.tar.gz";
+        sha256 =
+          "fbb77a75e529021e7c4a8d4e823d88ef4d23674a202be4f5addffc72cbb91430";
+      };
+      doCheck = commonDoCheck;
+      format = "pyproject";
+      nativeBuildInputs = [ self."pip" self."setuptools" self."wheel" ];
+      buildInputs = commonBuildInputs;
+      propagatedBuildInputs = [ ];
+      meta = with pkgs.stdenv.lib; {
+        homepage = "https://github.com/aio-libs/multidict";
+        license = licenses.asl20;
+        description = "multidict implementation";
+      };
+    };
+
+    "mypy" = pythonPackages.buildPythonPackage {
       name = "mypy-0.780";
       src = pkgs.fetchurl {
         url =
@@ -793,7 +913,8 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs ++ [ self."setuptools" self."wheel" ];
+      nativeBuildInputs = [ self."setuptools" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs =
         [ self."mypy-extensions" self."typed-ast" self."typing-extensions" ];
       meta = with pkgs.stdenv.lib; {
@@ -803,7 +924,7 @@ let
       };
     };
 
-    "mypy-extensions" = python.mkDerivation {
+    "mypy-extensions" = pythonPackages.buildPythonPackage {
       name = "mypy-extensions-0.4.3";
       src = pkgs.fetchurl {
         url =
@@ -813,9 +934,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/python/mypy_extensions";
@@ -825,7 +947,7 @@ let
       };
     };
 
-    "nix-prefetch-github" = python.mkDerivation {
+    "nix-prefetch-github" = pythonPackages.buildPythonPackage {
       name = "nix-prefetch-github-2.4";
       src = pkgs.fetchgit {
         url = "https://github.com/seppeljordan/nix-prefetch-github.git";
@@ -834,9 +956,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs =
         [ self."attrs" self."click" self."effect" self."jinja2" ];
       meta = with pkgs.stdenv.lib; {
@@ -846,7 +969,7 @@ let
       };
     };
 
-    "packaging" = python.mkDerivation {
+    "packaging" = pythonPackages.buildPythonPackage {
       name = "packaging-20.4";
       src = pkgs.fetchurl {
         url =
@@ -856,9 +979,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."pyparsing" self."six" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/pypa/packaging";
@@ -867,7 +991,7 @@ let
       };
     };
 
-    "parsley" = python.mkDerivation {
+    "parsley" = pythonPackages.buildPythonPackage {
       name = "parsley-1.3";
       src = pkgs.fetchurl {
         url =
@@ -877,9 +1001,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://launchpad.net/parsley";
@@ -888,7 +1013,7 @@ let
       };
     };
 
-    "pathspec" = python.mkDerivation {
+    "pathspec" = pythonPackages.buildPythonPackage {
       name = "pathspec-0.8.0";
       src = pkgs.fetchurl {
         url =
@@ -898,9 +1023,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/cpburnz/python-path-specification";
@@ -910,7 +1036,7 @@ let
       };
     };
 
-    "pdbpp" = python.mkDerivation {
+    "pdbpp" = pythonPackages.buildPythonPackage {
       name = "pdbpp-0.10.2";
       src = pkgs.fetchurl {
         url =
@@ -920,9 +1046,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs =
         [ self."fancycompleter" self."pygments" self."wmctrl" ];
       meta = with pkgs.stdenv.lib; {
@@ -932,7 +1059,28 @@ let
       };
     };
 
-    "pkginfo" = python.mkDerivation {
+    "pip" = pythonPackages.buildPythonPackage {
+      name = "pip-20.1.1";
+      src = pkgs.fetchurl {
+        url =
+          "https://files.pythonhosted.org/packages/08/25/f204a6138dade2f6757b4ae99bc3994aac28a5602c97ddb2a35e0e22fbc4/pip-20.1.1.tar.gz";
+        sha256 =
+          "27f8dc29387dd83249e06e681ce087e6061826582198a425085e0bf4c1cf3a55";
+      };
+      doCheck = commonDoCheck;
+      format = "pyproject";
+      nativeBuildInputs = [ self."setuptools" self."wheel" ];
+      buildInputs = commonBuildInputs;
+      propagatedBuildInputs = [ ];
+      meta = with pkgs.stdenv.lib; {
+        homepage = "https://pip.pypa.io/";
+        license = licenses.mit;
+        description =
+          "The PyPA recommended tool for installing Python packages.";
+      };
+    };
+
+    "pkginfo" = pythonPackages.buildPythonPackage {
       name = "pkginfo-1.5.0.1";
       src = pkgs.fetchurl {
         url =
@@ -942,9 +1090,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://code.launchpad.net/~tseaver/pkginfo/trunk";
@@ -954,7 +1103,7 @@ let
       };
     };
 
-    "pluggy" = python.mkDerivation {
+    "pluggy" = pythonPackages.buildPythonPackage {
       name = "pluggy-0.13.1";
       src = pkgs.fetchurl {
         url =
@@ -964,8 +1113,9 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs
-        ++ [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      nativeBuildInputs =
+        [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."importlib-metadata" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/pytest-dev/pluggy";
@@ -974,7 +1124,7 @@ let
       };
     };
 
-    "py" = python.mkDerivation {
+    "py" = pythonPackages.buildPythonPackage {
       name = "py-1.8.2";
       src = pkgs.fetchurl {
         url =
@@ -984,9 +1134,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://py.readthedocs.io/";
@@ -996,7 +1147,7 @@ let
       };
     };
 
-    "pyaml" = python.mkDerivation {
+    "pyaml" = pythonPackages.buildPythonPackage {
       name = "pyaml-19.4.1";
       src = pkgs.fetchurl {
         url =
@@ -1006,9 +1157,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."pyyaml" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/mk-fg/pretty-yaml";
@@ -1018,7 +1170,7 @@ let
       };
     };
 
-    "pycodestyle" = python.mkDerivation {
+    "pycodestyle" = pythonPackages.buildPythonPackage {
       name = "pycodestyle-2.6.0";
       src = pkgs.fetchurl {
         url =
@@ -1028,9 +1180,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://pycodestyle.readthedocs.io/";
@@ -1039,7 +1192,7 @@ let
       };
     };
 
-    "pycparser" = python.mkDerivation {
+    "pycparser" = pythonPackages.buildPythonPackage {
       name = "pycparser-2.20";
       src = pkgs.fetchurl {
         url =
@@ -1049,9 +1202,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/eliben/pycparser";
@@ -1060,7 +1214,7 @@ let
       };
     };
 
-    "pyflakes" = python.mkDerivation {
+    "pyflakes" = pythonPackages.buildPythonPackage {
       name = "pyflakes-2.2.0";
       src = pkgs.fetchurl {
         url =
@@ -1070,9 +1224,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/PyCQA/pyflakes";
@@ -1081,7 +1236,7 @@ let
       };
     };
 
-    "pygments" = python.mkDerivation {
+    "pygments" = pythonPackages.buildPythonPackage {
       name = "pygments-2.6.1";
       src = pkgs.fetchurl {
         url =
@@ -1091,9 +1246,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://pygments.org/";
@@ -1103,7 +1259,7 @@ let
       };
     };
 
-    "pyparsing" = python.mkDerivation {
+    "pyparsing" = pythonPackages.buildPythonPackage {
       name = "pyparsing-2.4.7";
       src = pkgs.fetchurl {
         url =
@@ -1113,9 +1269,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/pyparsing/pyparsing/";
@@ -1124,7 +1281,7 @@ let
       };
     };
 
-    "pyrepl" = python.mkDerivation {
+    "pyrepl" = pythonPackages.buildPythonPackage {
       name = "pyrepl-0.9.0";
       src = pkgs.fetchurl {
         url =
@@ -1134,9 +1291,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://bitbucket.org/pypy/pyrepl/";
@@ -1145,7 +1303,7 @@ let
       };
     };
 
-    "pyrsistent" = python.mkDerivation {
+    "pyrsistent" = pythonPackages.buildPythonPackage {
       name = "pyrsistent-0.16.0";
       src = pkgs.fetchurl {
         url =
@@ -1155,9 +1313,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."six" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://github.com/tobgu/pyrsistent/";
@@ -1166,7 +1325,7 @@ let
       };
     };
 
-    "pytest" = python.mkDerivation {
+    "pytest" = pythonPackages.buildPythonPackage {
       name = "pytest-5.4.3";
       src = pkgs.fetchurl {
         url =
@@ -1176,8 +1335,9 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs
-        ++ [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      nativeBuildInputs =
+        [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [
         self."attrs"
         self."importlib-metadata"
@@ -1194,7 +1354,7 @@ let
       };
     };
 
-    "pytest-cov" = python.mkDerivation {
+    "pytest-cov" = pythonPackages.buildPythonPackage {
       name = "pytest-cov-2.10.0";
       src = pkgs.fetchurl {
         url =
@@ -1204,9 +1364,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."coverage" self."pytest" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/pytest-dev/pytest-cov";
@@ -1215,7 +1376,7 @@ let
       };
     };
 
-    "pytest-runner" = python.mkDerivation {
+    "pytest-runner" = pythonPackages.buildPythonPackage {
       name = "pytest-runner-5.2";
       src = pkgs.fetchurl {
         url =
@@ -1225,8 +1386,9 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs
-        ++ [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      nativeBuildInputs =
+        [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/pytest-dev/pytest-runner/";
@@ -1236,7 +1398,7 @@ let
       };
     };
 
-    "pytoml" = python.mkDerivation {
+    "pytoml" = pythonPackages.buildPythonPackage {
       name = "pytoml-0.1.21";
       src = pkgs.fetchurl {
         url =
@@ -1246,9 +1408,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/avakar/pytoml";
@@ -1257,7 +1420,7 @@ let
       };
     };
 
-    "pytz" = python.mkDerivation {
+    "pytz" = pythonPackages.buildPythonPackage {
       name = "pytz-2020.1";
       src = pkgs.fetchurl {
         url =
@@ -1267,9 +1430,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://pythonhosted.org/pytz";
@@ -1278,7 +1442,7 @@ let
       };
     };
 
-    "pyyaml" = python.mkDerivation {
+    "pyyaml" = pythonPackages.buildPythonPackage {
       name = "pyyaml-5.3.1";
       src = pkgs.fetchurl {
         url =
@@ -1288,9 +1452,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/yaml/pyyaml";
@@ -1299,7 +1464,7 @@ let
       };
     };
 
-    "readme-renderer" = python.mkDerivation {
+    "readme-renderer" = pythonPackages.buildPythonPackage {
       name = "readme-renderer-26.0";
       src = pkgs.fetchurl {
         url =
@@ -1309,9 +1474,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs =
         [ self."bleach" self."docutils" self."pygments" self."six" ];
       meta = with pkgs.stdenv.lib; {
@@ -1322,7 +1488,7 @@ let
       };
     };
 
-    "regex" = python.mkDerivation {
+    "regex" = pythonPackages.buildPythonPackage {
       name = "regex-2020.6.8";
       src = pkgs.fetchurl {
         url =
@@ -1332,9 +1498,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://bitbucket.org/mrabarnett/mrab-regex";
@@ -1343,7 +1510,7 @@ let
       };
     };
 
-    "requests" = python.mkDerivation {
+    "requests" = pythonPackages.buildPythonPackage {
       name = "requests-2.24.0";
       src = pkgs.fetchurl {
         url =
@@ -1353,9 +1520,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs =
         [ self."certifi" self."chardet" self."idna" self."urllib3" ];
       meta = with pkgs.stdenv.lib; {
@@ -1365,7 +1533,7 @@ let
       };
     };
 
-    "requests-toolbelt" = python.mkDerivation {
+    "requests-toolbelt" = pythonPackages.buildPythonPackage {
       name = "requests-toolbelt-0.9.1";
       src = pkgs.fetchurl {
         url =
@@ -1375,9 +1543,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."requests" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://toolbelt.readthedocs.org";
@@ -1386,7 +1555,7 @@ let
       };
     };
 
-    "secretstorage" = python.mkDerivation {
+    "secretstorage" = pythonPackages.buildPythonPackage {
       name = "secretstorage-3.1.2";
       src = pkgs.fetchurl {
         url =
@@ -1396,7 +1565,8 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs ++ [ self."setuptools" self."wheel" ];
+      nativeBuildInputs = [ self."setuptools" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."cryptography" self."jeepney" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/mitya57/secretstorage";
@@ -1405,7 +1575,7 @@ let
       };
     };
 
-    "setupmeta" = python.mkDerivation {
+    "setupmeta" = pythonPackages.buildPythonPackage {
       name = "setupmeta-2.7.8";
       src = pkgs.fetchurl {
         url =
@@ -1415,9 +1585,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/zsimic/setupmeta";
@@ -1426,7 +1597,7 @@ let
       };
     };
 
-    "setuptools" = python.mkDerivation {
+    "setuptools" = pythonPackages.buildPythonPackage {
       name = "setuptools-47.3.1";
       src = pkgs.fetchurl {
         url =
@@ -1436,9 +1607,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/pypa/setuptools";
@@ -1448,7 +1620,7 @@ let
       };
     };
 
-    "setuptools-scm" = python.mkDerivation {
+    "setuptools-scm" = pythonPackages.buildPythonPackage {
       name = "setuptools-scm-4.1.2";
       src = pkgs.fetchurl {
         url =
@@ -1458,7 +1630,8 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs ++ [ self."setuptools" self."wheel" ];
+      nativeBuildInputs = [ self."setuptools" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ self."setuptools" ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/pypa/setuptools_scm/";
@@ -1467,7 +1640,7 @@ let
       };
     };
 
-    "six" = python.mkDerivation {
+    "six" = pythonPackages.buildPythonPackage {
       name = "six-1.15.0";
       src = pkgs.fetchurl {
         url =
@@ -1477,9 +1650,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/benjaminp/six";
@@ -1488,7 +1662,7 @@ let
       };
     };
 
-    "snowballstemmer" = python.mkDerivation {
+    "snowballstemmer" = pythonPackages.buildPythonPackage {
       name = "snowballstemmer-2.0.0";
       src = pkgs.fetchurl {
         url =
@@ -1498,9 +1672,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/snowballstem/snowball";
@@ -1510,7 +1685,7 @@ let
       };
     };
 
-    "sortedcontainers" = python.mkDerivation {
+    "sortedcontainers" = pythonPackages.buildPythonPackage {
       name = "sortedcontainers-2.2.2";
       src = pkgs.fetchurl {
         url =
@@ -1520,9 +1695,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://www.grantjenks.com/docs/sortedcontainers/";
@@ -1532,7 +1708,7 @@ let
       };
     };
 
-    "sphinx" = python.mkDerivation {
+    "sphinx" = pythonPackages.buildPythonPackage {
       name = "sphinx-3.1.1";
       src = pkgs.fetchurl {
         url =
@@ -1542,9 +1718,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [
         self."alabaster"
         self."babel"
@@ -1570,7 +1747,7 @@ let
       };
     };
 
-    "sphinxcontrib-applehelp" = python.mkDerivation {
+    "sphinxcontrib-applehelp" = pythonPackages.buildPythonPackage {
       name = "sphinxcontrib-applehelp-1.0.2";
       src = pkgs.fetchurl {
         url =
@@ -1580,9 +1757,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://sphinx-doc.org/";
@@ -1592,7 +1770,7 @@ let
       };
     };
 
-    "sphinxcontrib-devhelp" = python.mkDerivation {
+    "sphinxcontrib-devhelp" = pythonPackages.buildPythonPackage {
       name = "sphinxcontrib-devhelp-1.0.2";
       src = pkgs.fetchurl {
         url =
@@ -1602,9 +1780,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://sphinx-doc.org/";
@@ -1614,7 +1793,7 @@ let
       };
     };
 
-    "sphinxcontrib-htmlhelp" = python.mkDerivation {
+    "sphinxcontrib-htmlhelp" = pythonPackages.buildPythonPackage {
       name = "sphinxcontrib-htmlhelp-1.0.3";
       src = pkgs.fetchurl {
         url =
@@ -1624,9 +1803,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://sphinx-doc.org/";
@@ -1636,7 +1816,7 @@ let
       };
     };
 
-    "sphinxcontrib-jsmath" = python.mkDerivation {
+    "sphinxcontrib-jsmath" = pythonPackages.buildPythonPackage {
       name = "sphinxcontrib-jsmath-1.0.1";
       src = pkgs.fetchurl {
         url =
@@ -1646,9 +1826,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://sphinx-doc.org/";
@@ -1658,7 +1839,7 @@ let
       };
     };
 
-    "sphinxcontrib-qthelp" = python.mkDerivation {
+    "sphinxcontrib-qthelp" = pythonPackages.buildPythonPackage {
       name = "sphinxcontrib-qthelp-1.0.3";
       src = pkgs.fetchurl {
         url =
@@ -1668,9 +1849,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://sphinx-doc.org/";
@@ -1680,7 +1862,7 @@ let
       };
     };
 
-    "sphinxcontrib-serializinghtml" = python.mkDerivation {
+    "sphinxcontrib-serializinghtml" = pythonPackages.buildPythonPackage {
       name = "sphinxcontrib-serializinghtml-1.1.4";
       src = pkgs.fetchurl {
         url =
@@ -1690,9 +1872,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://sphinx-doc.org/";
@@ -1702,7 +1885,7 @@ let
       };
     };
 
-    "toml" = python.mkDerivation {
+    "toml" = pythonPackages.buildPythonPackage {
       name = "toml-0.10.1";
       src = pkgs.fetchurl {
         url =
@@ -1712,9 +1895,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/uiri/toml";
@@ -1723,7 +1907,7 @@ let
       };
     };
 
-    "tqdm" = python.mkDerivation {
+    "tqdm" = pythonPackages.buildPythonPackage {
       name = "tqdm-4.46.1";
       src = pkgs.fetchurl {
         url =
@@ -1733,9 +1917,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/tqdm/tqdm";
@@ -1744,7 +1929,7 @@ let
       };
     };
 
-    "twine" = python.mkDerivation {
+    "twine" = pythonPackages.buildPythonPackage {
       name = "twine-3.1.1";
       src = pkgs.fetchurl {
         url =
@@ -1754,8 +1939,9 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs
-        ++ [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      nativeBuildInputs =
+        [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [
         self."importlib-metadata"
         self."keyring"
@@ -1773,7 +1959,7 @@ let
       };
     };
 
-    "typed-ast" = python.mkDerivation {
+    "typed-ast" = pythonPackages.buildPythonPackage {
       name = "typed-ast-1.4.1";
       src = pkgs.fetchurl {
         url =
@@ -1783,9 +1969,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/python/typed_ast";
@@ -1795,7 +1982,7 @@ let
       };
     };
 
-    "typing-extensions" = python.mkDerivation {
+    "typing-extensions" = pythonPackages.buildPythonPackage {
       name = "typing-extensions-3.7.4.2";
       src = pkgs.fetchurl {
         url =
@@ -1805,9 +1992,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage =
@@ -1817,7 +2005,7 @@ let
       };
     };
 
-    "urllib3" = python.mkDerivation {
+    "urllib3" = pythonPackages.buildPythonPackage {
       name = "urllib3-1.25.9";
       src = pkgs.fetchurl {
         url =
@@ -1827,9 +2015,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://urllib3.readthedocs.io/";
@@ -1839,7 +2028,7 @@ let
       };
     };
 
-    "wcwidth" = python.mkDerivation {
+    "wcwidth" = pythonPackages.buildPythonPackage {
       name = "wcwidth-0.2.4";
       src = pkgs.fetchurl {
         url =
@@ -1849,9 +2038,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/jquast/wcwidth";
@@ -1861,7 +2051,7 @@ let
       };
     };
 
-    "webencodings" = python.mkDerivation {
+    "webencodings" = pythonPackages.buildPythonPackage {
       name = "webencodings-0.5.1";
       src = pkgs.fetchurl {
         url =
@@ -1871,9 +2061,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/SimonSapin/python-webencodings";
@@ -1882,7 +2073,7 @@ let
       };
     };
 
-    "wheel" = python.mkDerivation {
+    "wheel" = pythonPackages.buildPythonPackage {
       name = "wheel-0.34.2";
       src = pkgs.fetchurl {
         url =
@@ -1892,7 +2083,8 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [ self."setuptools" ];
+      nativeBuildInputs = [ self."setuptools" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/pypa/wheel";
@@ -1901,7 +2093,7 @@ let
       };
     };
 
-    "wmctrl" = python.mkDerivation {
+    "wmctrl" = pythonPackages.buildPythonPackage {
       name = "wmctrl-0.3";
       src = pkgs.fetchurl {
         url =
@@ -1911,9 +2103,10 @@ let
       };
       doCheck = commonDoCheck;
       format = "setuptools";
-      buildInputs = commonBuildInputs ++ [
+      nativeBuildInputs = [
 
       ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "http://bitbucket.org/antocuni/wmctrl";
@@ -1922,7 +2115,29 @@ let
       };
     };
 
-    "zipp" = python.mkDerivation {
+    "yarl" = pythonPackages.buildPythonPackage {
+      name = "yarl-1.4.2";
+      src = pkgs.fetchurl {
+        url =
+          "https://files.pythonhosted.org/packages/d6/67/6e2507586eb1cfa6d55540845b0cd05b4b77c414f6bca8b00b45483b976e/yarl-1.4.2.tar.gz";
+        sha256 =
+          "58cd9c469eced558cd81aa3f484b2924e8897049e06889e8ff2510435b7ef74b";
+      };
+      doCheck = commonDoCheck;
+      format = "setuptools";
+      nativeBuildInputs = [
+
+      ];
+      buildInputs = commonBuildInputs;
+      propagatedBuildInputs = [ self."idna" self."multidict" ];
+      meta = with pkgs.stdenv.lib; {
+        homepage = "https://github.com/aio-libs/yarl/";
+        license = licenses.asl20;
+        description = "Yet another URL library";
+      };
+    };
+
+    "zipp" = pythonPackages.buildPythonPackage {
       name = "zipp-3.1.0";
       src = pkgs.fetchurl {
         url =
@@ -1932,8 +2147,9 @@ let
       };
       doCheck = commonDoCheck;
       format = "pyproject";
-      buildInputs = commonBuildInputs
-        ++ [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      nativeBuildInputs =
+        [ self."setuptools" self."setuptools-scm" self."wheel" ];
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
         homepage = "https://github.com/jaraco/zipp";

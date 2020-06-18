@@ -1,9 +1,10 @@
-    "{{ name }}" = python.mkDerivation {
+    "{{ name }}" = pythonPackages.buildPythonPackage {
       name = "{{ name }}-{{ version }}";
       src = {{ fetch_expression }};
       doCheck = commonDoCheck;
       format = "{{ package_format }}";
-      buildInputs = commonBuildInputs ++ {{ buildInputs }};
+      nativeBuildInputs = {{ buildInputs }};
+      buildInputs = commonBuildInputs;
       propagatedBuildInputs = {{ propagatedBuildInputs }};
       meta = with pkgs.stdenv.lib; {
         homepage = "{{ homepage }}";

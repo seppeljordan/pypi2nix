@@ -34,6 +34,8 @@ in {
   "pdbpp" = overridePythonPackage "pdbpp"
     [ (addBuildInputs [ self."setuptools-scm" ]) ];
 
+  "pip" = overridePythonPackage "pip" [ pipInstallIgnoresInstalled ];
+
   "py" =
     overridePythonPackage "py" [ (addBuildInputs [ self."setuptools-scm" ]) ];
 

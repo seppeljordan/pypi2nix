@@ -20,6 +20,30 @@
           commonBuildInputs = with pkgs; [ openssl libffi ];
           generatedPackages = self: {
 
+            "yarl" = python.pkgs.buildPythonPackage {
+              pname = "yarl";
+              version = "1.4.2";
+              src = pkgs.fetchurl {
+                url =
+                  "https://files.pythonhosted.org/packages/d6/67/6e2507586eb1cfa6d55540845b0cd05b4b77c414f6bca8b00b45483b976e/yarl-1.4.2.tar.gz";
+                sha256 =
+                  "58cd9c469eced558cd81aa3f484b2924e8897049e06889e8ff2510435b7ef74b";
+              };
+              doCheck = false;
+              format = "setuptools";
+              nativeBuildInputs = with self;
+                [
+
+                ];
+              buildInputs = commonBuildInputs;
+              propagatedBuildInputs = (with self; [ multidict idna ]);
+              meta = with pkgs.lib; {
+                homepage = "";
+                license = licenses.asl20;
+                description = "Yet another URL library";
+              };
+            };
+
             "pytest" = python.pkgs.buildPythonPackage {
               pname = "pytest";
               version = "5.4.3";
@@ -31,8 +55,12 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools setuptools-scm wheel ]);
+              nativeBuildInputs = with self; [
+                setuptools
+                setuptools-scm
+                wheel
+              ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [
                 py
                 packaging
@@ -60,10 +88,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -74,6 +103,30 @@
                 description =
                   "sphinxcontrib-serializinghtml is a sphinx extension which outputs "
                   serialized " HTML files (json and pickle).";
+              };
+            };
+
+            "aiohttp-cors" = python.pkgs.buildPythonPackage {
+              pname = "aiohttp-cors";
+              version = "0.7.0";
+              src = pkgs.fetchurl {
+                url =
+                  "https://files.pythonhosted.org/packages/44/9e/6cdce7c3f346d8fd487adf68761728ad8cd5fbc296a7b07b92518350d31f/aiohttp-cors-0.7.0.tar.gz";
+                sha256 =
+                  "4d39c6d7100fd9764ed1caf8cebf0eb01bf5e3f24e2e073fda6234bc48b19f5d";
+              };
+              doCheck = false;
+              format = "setuptools";
+              nativeBuildInputs = with self;
+                [
+
+                ];
+              buildInputs = commonBuildInputs;
+              propagatedBuildInputs = (with self; [ aiohttp ]);
+              meta = with pkgs.lib; {
+                homepage = "";
+                license = licenses.asl20;
+                description = "CORS support for aiohttp";
               };
             };
 
@@ -88,10 +141,11 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -115,10 +169,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -141,10 +196,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -168,10 +224,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ pycparser ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -192,10 +249,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ pyyaml ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -216,10 +274,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ pytoml ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -240,8 +299,12 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools wheel setuptools-scm ]);
+              nativeBuildInputs = with self; [
+                setuptools
+                wheel
+                setuptools-scm
+              ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -265,10 +328,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs =
                 (with self; [ fancycompleter wmctrl pygments ]);
               meta = with pkgs.lib; {
@@ -289,8 +353,12 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools setuptools-scm wheel ]);
+              nativeBuildInputs = with self; [
+                setuptools
+                setuptools-scm
+                wheel
+              ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ importlib-metadata ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -310,10 +378,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -337,15 +406,43 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ pyrepl ]);
               meta = with pkgs.lib; {
                 homepage = "";
                 license = licenses.bsdOriginal;
                 description = "colorful TAB completion for Python prompt";
+              };
+            };
+
+            "async-timeout" = python.pkgs.buildPythonPackage {
+              pname = "async-timeout";
+              version = "3.0.1";
+              src = pkgs.fetchurl {
+                url =
+                  "https://files.pythonhosted.org/packages/a1/78/aae1545aba6e87e23ecab8d212b58bb70e72164b67eb090b81bb17ad38e3/async-timeout-3.0.1.tar.gz";
+                sha256 =
+                  "0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f";
+              };
+              doCheck = false;
+              format = "setuptools";
+              nativeBuildInputs = with self;
+                [
+
+                ];
+              buildInputs = commonBuildInputs;
+              propagatedBuildInputs = (with self;
+                [
+
+                ]);
+              meta = with pkgs.lib; {
+                homepage = "";
+                license = licenses.asl20;
+                description = "Timeout context manager for asyncio programs";
               };
             };
 
@@ -360,8 +457,12 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools wheel setuptools-scm ]);
+              nativeBuildInputs = with self; [
+                setuptools
+                wheel
+                setuptools-scm
+              ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [
                 pkginfo
                 readme-renderer
@@ -391,10 +492,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ pytz ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -414,8 +516,8 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools wheel ]);
+              nativeBuildInputs = with self; [ setuptools wheel ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -438,10 +540,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [
                 sphinxcontrib-applehelp
                 sphinxcontrib-devhelp
@@ -478,10 +581,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -504,10 +608,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs =
                 (with self; [ chardet idna urllib3 certifi ]);
               meta = with pkgs.lib; {
@@ -528,10 +633,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -554,10 +660,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -581,10 +688,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -607,10 +715,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ pyparsing six ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -630,10 +739,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -656,10 +766,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -683,10 +794,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -709,10 +821,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -736,10 +849,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -763,10 +877,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -790,10 +905,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -803,6 +919,31 @@
                 license = licenses.bsdOriginal;
                 description =
                   "A tool to programmatically control windows inside X";
+              };
+            };
+
+            "pip" = python.pkgs.buildPythonPackage {
+              pname = "pip";
+              version = "20.1.1";
+              src = pkgs.fetchurl {
+                url =
+                  "https://files.pythonhosted.org/packages/08/25/f204a6138dade2f6757b4ae99bc3994aac28a5602c97ddb2a35e0e22fbc4/pip-20.1.1.tar.gz";
+                sha256 =
+                  "27f8dc29387dd83249e06e681ce087e6061826582198a425085e0bf4c1cf3a55";
+              };
+              doCheck = false;
+              format = "pyproject";
+              nativeBuildInputs = with self; [ setuptools wheel ];
+              buildInputs = commonBuildInputs;
+              propagatedBuildInputs = (with self;
+                [
+
+                ]);
+              meta = with pkgs.lib; {
+                homepage = "";
+                license = licenses.mit;
+                description =
+                  "The PyPA recommended tool for installing Python packages.";
               };
             };
 
@@ -817,10 +958,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ markupsafe ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -840,10 +982,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -867,8 +1010,12 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools wheel setuptools-scm ]);
+              nativeBuildInputs = with self; [
+                setuptools
+                wheel
+                setuptools-scm
+              ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -892,10 +1039,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ attrs ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -915,10 +1063,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -942,8 +1091,8 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools wheel ]);
+              nativeBuildInputs = with self; [ setuptools wheel ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs =
                 (with self; [ typed-ast typing-extensions mypy-extensions ]);
               meta = with pkgs.lib; {
@@ -964,10 +1113,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -990,10 +1140,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1017,8 +1168,12 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools wheel setuptools-scm ]);
+              nativeBuildInputs = with self; [
+                setuptools
+                wheel
+                setuptools-scm
+              ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs =
                 (with self; [ importlib-metadata secretstorage jeepney ]);
               meta = with pkgs.lib; {
@@ -1039,7 +1194,8 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs ++ (with self; [ intreehooks ]);
+              nativeBuildInputs = with self; [ intreehooks ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ pytoml ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -1060,10 +1216,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1087,8 +1244,12 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools wheel setuptools-scm ]);
+              nativeBuildInputs = with self; [
+                setuptools
+                wheel
+                setuptools-scm
+              ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [
                 attrs
                 pyrsistent
@@ -1115,10 +1276,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1142,10 +1304,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1169,10 +1332,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1196,10 +1360,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1223,10 +1388,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1249,10 +1415,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1275,10 +1442,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1303,10 +1471,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1330,10 +1499,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs =
                 (with self; [ packaging six webencodings ]);
               meta = with pkgs.lib; {
@@ -1354,10 +1524,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1381,10 +1552,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1407,7 +1579,8 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs ++ (with self; [ flit-core ]);
+              nativeBuildInputs = with self; [ flit-core ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1430,10 +1603,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1457,10 +1631,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1484,10 +1659,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1511,10 +1687,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1537,10 +1714,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1563,7 +1741,8 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self; [ setuptools ]);
+              nativeBuildInputs = with self; [ setuptools ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1586,10 +1765,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs =
                 (with self; [ pyflakes pycodestyle mccabe importlib-metadata ]);
               meta = with pkgs.lib; {
@@ -1611,8 +1791,12 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools wheel setuptools-scm ]);
+              nativeBuildInputs = with self; [
+                setuptools
+                wheel
+                setuptools-scm
+              ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ zipp ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -1632,10 +1816,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1645,6 +1830,31 @@
                 license = "MIT X11 style";
                 description =
                   "A library for building flexible command line interfaces";
+              };
+            };
+
+            "aiohttp" = python.pkgs.buildPythonPackage {
+              pname = "aiohttp";
+              version = "3.6.2";
+              src = pkgs.fetchurl {
+                url =
+                  "https://files.pythonhosted.org/packages/00/94/f9fa18e8d7124d7850a5715a0b9c0584f7b9375d331d35e157cee50f27cc/aiohttp-3.6.2.tar.gz";
+                sha256 =
+                  "259ab809ff0727d0e834ac5e8a283dc5e3e0ecc30c4d80b3cd17a4139ce1f326";
+              };
+              doCheck = false;
+              format = "setuptools";
+              nativeBuildInputs = with self;
+                [
+
+                ];
+              buildInputs = commonBuildInputs;
+              propagatedBuildInputs =
+                (with self; [ attrs chardet multidict async-timeout yarl ]);
+              meta = with pkgs.lib; {
+                homepage = "";
+                license = licenses.asl20;
+                description = "Async http client/server framework (asyncio)";
               };
             };
 
@@ -1659,10 +1869,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1686,10 +1897,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1713,10 +1925,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1739,10 +1952,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ attrs sortedcontainers ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -1762,10 +1976,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ requests ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -1786,10 +2001,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1812,8 +2028,8 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools wheel ]);
+              nativeBuildInputs = with self; [ setuptools wheel ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ setuptools ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -1834,10 +2050,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs =
                 (with self; [ bleach docutils pygments six ]);
               meta = with pkgs.lib; {
@@ -1860,10 +2077,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1887,8 +2105,8 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools wheel cffi ]);
+              nativeBuildInputs = with self; [ setuptools wheel cffi ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ six cffi ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -1909,10 +2127,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1935,10 +2154,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs =
                 (with self; [ attrs click effect jinja2 ]);
               meta = with pkgs.lib; {
@@ -1946,6 +2166,30 @@
                 license = "GPLv3";
                 description =
                   "Prefetch source code from github for nix build tool";
+              };
+            };
+
+            "multidict" = python.pkgs.buildPythonPackage {
+              pname = "multidict";
+              version = "4.7.6";
+              src = pkgs.fetchurl {
+                url =
+                  "https://files.pythonhosted.org/packages/65/d4/fabdcc5ee4451c8a8e177e27ddfd131a53a82ecc5a3b68468b7e9f8d70b4/multidict-4.7.6.tar.gz";
+                sha256 =
+                  "fbb77a75e529021e7c4a8d4e823d88ef4d23674a202be4f5addffc72cbb91430";
+              };
+              doCheck = false;
+              format = "pyproject";
+              nativeBuildInputs = with self; [ pip setuptools wheel ];
+              buildInputs = commonBuildInputs;
+              propagatedBuildInputs = (with self;
+                [
+
+                ]);
+              meta = with pkgs.lib; {
+                homepage = "";
+                license = licenses.asl20;
+                description = "multidict implementation";
               };
             };
 
@@ -1960,10 +2204,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -1986,10 +2231,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ click pyaml ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -2010,10 +2256,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ flake8 pycodestyle ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -2033,10 +2280,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -2060,10 +2308,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ six ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -2083,10 +2332,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -2110,10 +2360,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ pytest coverage ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -2133,10 +2384,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self;
                 [
 
@@ -2159,8 +2411,8 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools wheel ]);
+              nativeBuildInputs = with self; [ setuptools wheel ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ cryptography jeepney ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -2181,10 +2433,11 @@
               };
               doCheck = false;
               format = "setuptools";
-              buildInputs = commonBuildInputs ++ (with self;
+              nativeBuildInputs = with self;
                 [
 
-                ]);
+                ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [ flake8 ]);
               meta = with pkgs.lib; {
                 homepage = "";
@@ -2205,8 +2458,12 @@
               };
               doCheck = false;
               format = "pyproject";
-              buildInputs = commonBuildInputs
-                ++ (with self; [ setuptools setuptools-scm wheel ]);
+              nativeBuildInputs = with self; [
+                setuptools
+                setuptools-scm
+                wheel
+              ];
+              buildInputs = commonBuildInputs;
               propagatedBuildInputs = (with self; [
                 click
                 attrs
